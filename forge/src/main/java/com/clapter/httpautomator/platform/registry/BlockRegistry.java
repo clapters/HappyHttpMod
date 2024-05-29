@@ -1,13 +1,11 @@
-package com.clapter.httpautomator.platform;
+package com.clapter.httpautomator.platform.registry;
 
 import com.clapter.httpautomator.Constants;
-import com.clapter.httpautomator.platform.services.IBlockRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 

@@ -1,4 +1,4 @@
-package com.clapter.httpautomator.platform.services;
+package com.clapter.httpautomator.platform;
 
 public interface IPlatformHelper {
 

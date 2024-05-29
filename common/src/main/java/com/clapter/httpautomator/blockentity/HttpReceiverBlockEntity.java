@@ -7,6 +7,9 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class HttpReceiverBlockEntity extends BlockEntity {
 
+    private String url;
+
+
     public HttpReceiverBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.httpReceiverBlockEntity.get().get(), pos, state);
     }

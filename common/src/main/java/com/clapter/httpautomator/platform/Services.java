@@ -1,13 +1,10 @@
 package com.clapter.httpautomator.platform;
 
-import com.clapter.httpautomator.Constants;
-import com.clapter.httpautomator.platform.services.IBlockEntityRegistry;
-import com.clapter.httpautomator.platform.services.IBlockRegistry;
-import com.clapter.httpautomator.platform.services.IItemRegistry;
-import com.clapter.httpautomator.platform.services.IPlatformHelper;
+import com.clapter.httpautomator.platform.network.IPacketHandler;
+import com.clapter.httpautomator.platform.registry.IBlockEntityRegistry;
+import com.clapter.httpautomator.platform.registry.IBlockRegistry;
+import com.clapter.httpautomator.platform.registry.IItemRegistry;
 import com.clapter.httpautomator.utils.ImplLoader;
-
-import java.util.ServiceLoader;
 
 public class Services {
 
@@ -15,4 +12,6 @@ public class Services {
     public static final IBlockRegistry BLOCK_REGISTRY = ImplLoader.loadSingle(IBlockRegistry.class);
     public static final IItemRegistry ITEM_REGISTRY = ImplLoader.loadSingle(IItemRegistry.class);
     public static final IBlockEntityRegistry BLOCK_ENTITIES_REGISTRY = ImplLoader.loadSingle(IBlockEntityRegistry.class);
+    public static final IPacketHandler PACKET_HANDLER = ImplLoader.loadSingle(IPacketHandler.class);
+
 }

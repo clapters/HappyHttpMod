@@ -1,6 +1,5 @@
 package com.clapter.httpautomator.platform;
 
-import com.clapter.httpautomator.platform.services.IPlatformHelper;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 

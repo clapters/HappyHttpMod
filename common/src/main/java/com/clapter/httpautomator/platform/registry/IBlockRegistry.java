@@ -1,9 +1,7 @@
-package com.clapter.httpautomator.platform.services;
+package com.clapter.httpautomator.platform.registry;
 
-import com.clapter.httpautomator.platform.DeferredObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.function.Supplier;
 

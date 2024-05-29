@@ -1,6 +1,6 @@
 package com.clapter.httpautomator.platform;
 
-import com.clapter.httpautomator.platform.services.IPlatformHelper;
+import com.clapter.httpautomator.platform.registry.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 
 public class FabricPlatformHelper implements IPlatformHelper {
