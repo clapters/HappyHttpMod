@@ -20,7 +20,7 @@ public class ItemRegistry implements IItemRegistry {
         ITEMS.register(identifier.getPath(), item);
     }
 
-    public static void finishRegistry(){
+    public void finishRegistry(){
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 }

@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
@@ -19,8 +20,9 @@ public class BlockRegistry implements IBlockRegistry {
         BLOCKS.register(identifier.getPath(), block);
     }
 
-    public static void finishRegistry(){
+    public void finishRegistry(){
         BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
+
 
 }

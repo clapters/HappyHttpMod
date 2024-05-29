@@ -8,5 +8,5 @@ import java.util.function.Supplier;
 public interface IItemRegistry {
 
     void registerItem(ResourceLocation identifier, Supplier<Item> item);
-
+    void finishRegistry();
 }

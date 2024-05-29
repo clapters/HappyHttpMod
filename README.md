@@ -1,31 +1,70 @@
-# MultiLoader Template
+# httpAutomator Mod
 
-This project provides a Gradle project template that can compile mods for both Forge and Fabric using a common sourceset. This project does not require any third party libraries or dependencies. If you have any questions or want to discuss the project join our [Discord](https://discord.myceliummod.network).
+This Minecraft mod introduces two custom blocks that interact with webhooks and HTTP requests, enabling powerful integrations and automations both within and outside the Minecraft world.
 
-## Getting Started
+## Introduction
 
-### IntelliJ IDEA
-This guide will show how to import the MultiLoader Template into IntelliJ IDEA. The setup process is roughly equivalent to setting up Forge and Fabric independently and should be very familiar to anyone who has worked with their MDKs.
+**httpAutomator** allows you to connect your Minecraft world to external systems using HTTP requests. This mod includes:
 
-1. Clone or download this repository to your computer.
-2. Configure the project by editing the `group`, `mod_name`, `mod_author`, and `mod_id` properties in the `gradle.properties` file. You will also need to change the `rootProject.name`  property in `settings.gradle`, this should match the folder name of your project, or else IDEA may complain.
-3. Open the template's root folder as a new project in IDEA. This is the folder that contains this README file and the gradlew executable.
-4. If your default JVM/JDK is not Java 17 you will encounter an error when opening the project. This error is fixed by going to `File > Settings > Build, Execution, Deployment > Build Tools > Gradle > Gradle JVM`and changing the value to a valid Java 17 JVM. You will also need to set the Project SDK to Java 17. This can be done by going to `File > Project Structure > Project SDK`. Once both have been set open the Gradle tab in IDEA and click the refresh button to reload the project.
-5. Open the Gradle tab in IDEA if it has not already been opened. Navigate to `Your Project > Common > Tasks > vanilla gradle > decompile`. Run this task to decompile Minecraft.
-6. Open the Gradle tab in IDEA if it has not already been opened. Navigate to `Your Project > Forge > Tasks > forgegradle runs > genIntellijRuns`. Run this task to set up run configurations for Forge.
-7. Open your Run/Debug Configurations. Under the Application category there should now be options to run Forge and Fabric projects. Select one of the client options and try to run it.
-8. Assuming you were able to run the game in step 7 your workspace should now be set up.
+- **HTTP Receiver Block**: Sends a redstone signal when a webhook with the correct parameters is accessed. Ideal for starting automations in Minecraft from outside triggers.
+- **HTTP Sender Block**: Sends an HTTP request to a specified URL with parameters when it receives a redstone signal. Perfect for triggering automation on APIs, home automation systems, and more.
 
-### Eclipse
-While it is possible to use this template in Eclipse it is not recommended. During the development of this template multiple critical bugs and quirks related to Eclipse were found at nearly every level of the required build tools. While we continue to work with these tools to report and resolve issues support for projects like these are not there yet. For now Eclipse is considered unsupported by this project. The development cycle for build tools is notoriously slow so there are no ETAs available.
+### Use Cases
 
-## Development Guide
-When using this template the majority of your mod is developed in the Common project. The Common project is compiled against the vanilla game and is used to hold code that is shared between the different loader-specific versions of your mod. The Common project has no knowledge or access to ModLoader specific code, apis, or concepts. Code that requires something from a specific loader must be done through the project that is specific to that loader, such as the Forge or Fabric project.
+- **HTTP Receiver Block**: 
+  - **Starting Automations in Minecraft from Outside Triggers**: Use the HTTP Receiver Block to initiate Minecraft automations based on external events. For example, trigger in-game events from a smart home system when motion is detected, or start a Minecraft mechanism when a specific condition is met on an external server or service.
+  
+- **HTTP Sender Block**: 
+  - **Trigger Automation on APIs, Home Automation Systems, etc.**: Use the HTTP Sender Block to send HTTP requests to external APIs or services. For example, trigger actions on a home automation system, like turning on lights or unlocking doors, when a redstone signal is received, or send notifications or update external systems based on in-game events.
 
-Loader specific projects such as the Forge and Fabric project are used to load the Common project into the game. These projects also define code that is specific to that loader. Loader specific projects can access all of the code in the Common project. It is important to remember that the Common project can not access code from loader specific projects.
+## Features
 
-## Removing Platforms and Loaders
-While the MultiLoader Template includes support for many platforms and loaders you can easily remove support for the ones you don't need. This can be done by deleting the subproject folder and then removing it from the `settings.gradle` file. For example if you wanted to remove support for Forge you would follow the following steps. 
+- **Cross-Platform**: The webhook server is integrated into the mod and works on both Windows and Linux. It binds to the IP of the host machine on a configurable port.
 
-1. Delete the subproject folder. For example, delete `MultiLoader-Template/forge`.
-2. Remove the project from `settings.gradle`. For example, remove `include("forge")`. 
+## Installation
+
+1. **Download the Mod**:
+   - Download the latest release of the mod from the [Releases](https://github.com/clapters/httpAutomator/releases) page.
+
+2. **Add to Minecraft**:
+   - Copy the downloaded `.jar` file to your Minecraft `mods` folder.
+
+## Usage
+
+1. **Configure the Webhook Server**:
+   - After the first run, a configuration file named `httpAutomator-config.json` will be generated in the Minecraft configuration directory (usually `.minecraft/config/`).
+   - Edit the `httpAutomator-config.json` file to set up the webhook server's IP address and port:
+     ```json
+     {
+       "webhookServerIP": "",
+       "webhookServerPort": 4567
+     }
+     ```
+   - If `webhookServerIP` is left blank or missing, the server will use the IP of the local machine. If your machine has multiple IP addresses, specify the desired IP address to bind the server to that specific IP.
+
+2. **Place and Configure Blocks**:
+   - **HTTP Receiver Block**: 
+     - Place the HTTP Receiver Block in your Minecraft world.
+     - Right-click the block to open its configuration interface.
+     - Set up the parameters that the block should listen for when a webhook request is received, such as expected parameter keys and values.
+
+   - **HTTP Sender Block**:
+     - Place the HTTP Sender Block in your Minecraft world.
+     - Right-click the block to open its configuration interface.
+     - Set the target URL and parameters that the block should send when it receives a redstone signal.
+
+3. **Set Up Redstone Circuits**:
+   - Connect the HTTP Receiver Block to redstone dust and a redstone lamp or any other redstone mechanism.
+   - Ensure the HTTP Sender Block is connected to a redstone input source (like a button or lever).
+
+## Support
+
+If you encounter any issues or have questions, please open an issue on the [GitHub Issues](https://github.com/clapters/httpAutomator/issues) page.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+Enjoy automating your Minecraft world with webhooks and HTTP requests!
