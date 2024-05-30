@@ -14,7 +14,6 @@ public class CommonClass {
     public static final IHttpServer HTTP_SERVER = new HttpServerImpl();
 
     public static void init() {
-
         ModBlocks.registerBlocks();
         ModBlockEntities.registerBlockEntities();
         ModItems.registerItems();

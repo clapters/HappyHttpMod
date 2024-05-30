@@ -2,12 +2,14 @@ package com.clapter.httpautomator.http;
 
 import com.clapter.httpautomator.http.api.IHttpHandler;
 import com.clapter.httpautomator.http.api.IHttpServer;
+import com.clapter.httpautomator.platform.Services;
 import com.clapter.httpautomator.utils.ImplLoader;
 import com.sun.net.httpserver.HttpServer;
 import org.apache.http.HttpMessage;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.security.Provider;
 import java.util.*;
 
 public class HttpServerImpl implements IHttpServer {
@@ -27,6 +29,7 @@ public class HttpServerImpl implements IHttpServer {
     }
 
     public boolean startServer() throws IOException {
+        System.out.println("PORT: "+Services.HTTP_CONFIG.getPort());
         server = HttpServer.create(new InetSocketAddress(8080), 0);
         server.setExecutor(null); // creates a default executor
         server.start();

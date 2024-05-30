@@ -1,37 +1,32 @@
-package com.clapter.httpautomator.config;
+package com.clapter.httpautomator.platform.config;
 
+import com.clapter.httpautomator.platform.config.IHttpServerConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class HttpServerConfig implements IHttpServerConfig {
 
-    public static final ForgeConfigSpec COMMON_SPEC;
+    //public static final ForgeConfigSpec COMMON_SPEC;
+    private final ForgeConfigSpec.ConfigValue<Integer> port;
 
     static {
-        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
-        COMMON_SPEC = builder.build();
+        Pair<HttpServerConfig, ForgeConfigSpec> pair = new ForgeConfigSpec.Builder().configure(HttpServerConfig::new);
+
     }
 
-    public HttpServerConfig() {
-        
+    public HttpServerConfig(ForgeConfigSpec.Builder builder) {
+        builder.push("Http Server Settings");
+
+        port = builder
+                .comment("Http Server Port")
+                .define("port", 8080);
+
+        builder.pop();
     }
 
     @Override
     public int getPort() {
         return COMMON_SPEC.getInt("port");
-    }
-
-    public static class Common {
-        public final ForgeConfigSpec.ConfigValue<Integer> port;
-
-        Common(ForgeConfigSpec.Builder builder) {
-            builder.push("Http Server Settings");
-
-            port = builder
-                    .comment("Http Server Port")
-                    .define("port", 8080);
-
-            builder.pop();
-        }
     }
 
 }
