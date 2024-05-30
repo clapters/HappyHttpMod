@@ -1,6 +1,7 @@
 package com.clapter.httpautomator.network.packet;
 
 import com.clapter.httpautomator.blockentity.HttpReceiverBlockEntity;
+import com.clapter.httpautomator.client.gui.HttpReceiverSettingsScreen;
 import com.clapter.httpautomator.network.IPacketContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -25,7 +26,6 @@ public class CSyncHttpReceiverValuesPacket extends BasePacket{
     public void encode(FriendlyByteBuf buf){
         buf.writeBlockPos(this.entityPos);
         this.values.writeValues(buf);
-
     }
 
 
@@ -36,7 +36,8 @@ public class CSyncHttpReceiverValuesPacket extends BasePacket{
             BlockEntity entity = level.getBlockEntity(this.entityPos);
             if(entity instanceof HttpReceiverBlockEntity receiver){
                 receiver.updateValues(this.values);
-                //TODO: Maybe need to force syncinc current Screen, if opened
+                //TODO: Separate screen opening from this packet
+                Minecraft.getInstance().setScreen(new HttpReceiverSettingsScreen(receiver));
             }
         }
     }

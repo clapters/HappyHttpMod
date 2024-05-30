@@ -32,8 +32,13 @@ public class HttpReceiverBlockEntity extends BlockEntity {
     public void updateValues(Values values){
         this.values.updateValues(values);
         setChanged();
-        if(!this.getLevel().isClientSide)
-            new HttpReceiverBlockHandler(this, this.values.url);
+        if(!this.getLevel().isClientSide) {
+            HttpReceiverBlockHandler.create(this, this.values.url);
+        }
+    }
+
+    private void postLoad(){
+        HttpReceiverBlockHandler.create(this, this.values.url);
     }
 
     public Values getValues(){
@@ -46,6 +51,7 @@ public class HttpReceiverBlockEntity extends BlockEntity {
         super.load(nbt);
         CompoundTag compound = nbt.getCompound(Constants.MOD_ID);
         this.values.url = compound.getString("url");
+        this.postLoad();
     }
 
     @Override

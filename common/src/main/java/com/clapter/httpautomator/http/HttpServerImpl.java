@@ -8,26 +8,34 @@ import org.apache.http.HttpMessage;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class HttpServerImpl implements IHttpServer {
 
     private HttpServer server;
 
-    private Map<Integer, IHttpHandler> handlerMap;
+    //private Map<Integer, IHttpHandler> handlerMap;
+    private Map<String, IHttpHandler> handlerMap;
+    //USING MAP INSTEAD OF QUEUE FOR FAST RETRIEVAL OF A HANDLER FROM THE QUEUE BY ITS KEY
+    private Map<String, IHttpHandler> handlerToRegisterQueue;
+
 
     public HttpServerImpl(){
-        handlerMap = new HashMap<Integer, IHttpHandler>();
+        handlerMap = new HashMap<String, IHttpHandler>();
+        //urlToHandlerMap = new HashMap<String, IHttpHandler>();
+        handlerToRegisterQueue = new HashMap<String, IHttpHandler>();
     }
 
     public boolean startServer() throws IOException {
         server = HttpServer.create(new InetSocketAddress(8080), 0);
         server.setExecutor(null); // creates a default executor
         server.start();
+        this.handleHandlersInQueue();
         return true;
+    }
+
+    private void handleHandlersInQueue() {
+        handlerToRegisterQueue.values().forEach(this::registerHandler);
     }
 
     @Override
@@ -38,13 +46,27 @@ public class HttpServerImpl implements IHttpServer {
 
     @Override
     public void registerHandler(IHttpHandler handler) {
-        if(!handlerMap.containsKey(handler.getId())) {
+        if(server == null){
+            handlerToRegisterQueue.put(handler.getUrl(), handler);
+        }else{
+            this.handleRegisteringHandlers(handler);
+        }
+    }
+
+    @Override
+    public IHttpHandler getHandlerByUrl(String url) {
+        if(handlerMap.get(url) != null)return handlerMap.get(url);
+        if(handlerToRegisterQueue.get(url) != null)return handlerToRegisterQueue.get(url);
+        return null;
+    }
+
+    private void handleRegisteringHandlers(IHttpHandler handler) {
+        if(!handlerMap.containsKey(handler.getUrl())) {
             registerAndPutInMap(handler);
         }else{
             //ALREADY CONTAINING A HANDLER FOR THAT ID (FOR THAT BLOCK IN OUR TEST)
             //FOR NOW JUST OVERRIDE WITH NEW ONE
-
-            server.removeContext(handlerMap.get(handler.getId()).getUrl());
+            server.removeContext(handler.getUrl());
             registerAndPutInMap(handler);
 
         }
@@ -52,7 +74,7 @@ public class HttpServerImpl implements IHttpServer {
 
     private void registerAndPutInMap(IHttpHandler handler) {
         server.createContext(handler.getUrl(), handler);
-        handlerMap.put(handler.getId(), handler);
+        handlerMap.put(handler.getUrl(), handler);
     }
 
     @Override

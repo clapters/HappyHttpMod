@@ -8,4 +8,5 @@ public interface IHttpServer {
     void initHandlers();
     void stopServer();
     void registerHandler(IHttpHandler handler);
+    IHttpHandler getHandlerByUrl(String url);
 }

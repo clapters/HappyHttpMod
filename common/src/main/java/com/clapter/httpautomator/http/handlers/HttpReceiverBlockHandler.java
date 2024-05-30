@@ -7,27 +7,48 @@ import com.sun.net.httpserver.HttpExchange;
 import net.minecraft.core.BlockPos;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class HttpReceiverBlockHandler implements IHttpHandler {
 
-    private HttpReceiverBlockEntity entity;
+    //MAYBE SWITCH TO SET FOR FASTER REMOVAL OF ENTRIES
+    private List<HttpReceiverBlockEntity> entityList;
     private String url;
     private static final String ALLOWED_METHOD = "POST";
 
     public HttpReceiverBlockHandler(HttpReceiverBlockEntity entity, String url){
-        this.entity = entity;
+        this.entityList = new ArrayList<HttpReceiverBlockEntity>(Collections.singletonList(entity));
         this.url = url;
-        CommonClass.HTTP_SERVER.registerHandler(this);
     }
 
+    public static void create(HttpReceiverBlockEntity entity, String url){
+        IHttpHandler handler = CommonClass.HTTP_SERVER.getHandlerByUrl(url);
+        if(handler != null) {
+            if (handler instanceof HttpReceiverBlockHandler receiverHandler) {
+                //ADD TO EXISTING HADNLER
+                receiverHandler.addBlockEntity(entity);
+                return;
+            }
+            //ERROR BECAUSE URL ALREADY EXISTS
+            return;
+        }
+        HttpReceiverBlockHandler newHandler = new HttpReceiverBlockHandler(entity, url);
+        CommonClass.HTTP_SERVER.registerHandler(newHandler);
+    }
+
+    private void addBlockEntity(HttpReceiverBlockEntity entity){
+        this.entityList.add(entity);
+    }
+
+    private void removeBlockEntity(HttpReceiverBlockEntity entity){
+        this.entityList.remove(entity);
+    }
 
     @Override
     public int getId() {
         //THE IDEA IS TO ASSIGN THE POSITION OF THE ENTITY AS IT'S ID
         //MIGHT NEED A BETTER WAY, BUT IT WORKS FOR TESTS
-        return entity.getBlockPos().hashCode();
+        return 0;
     }
 
     @Override
@@ -42,10 +63,6 @@ public class HttpReceiverBlockHandler implements IHttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        if(entity == null){
-            //TODO: Entity unloaded -> Remove the handler
-            return;
-        }
-        entity.onSignal();
+        entityList.forEach(HttpReceiverBlockEntity::onSignal);
     }
 }
