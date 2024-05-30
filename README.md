@@ -2,14 +2,21 @@
 
 This Minecraft mod introduces two custom blocks that interact with webhooks and HTTP requests, enabling powerful integrations and automations both within and outside the Minecraft world.
 
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Features](#features)
+- [Configuration](#configuration)
+- [Contributing](#contributing)
+- [License](#license)
+
+
 ## Introduction
 
-**httpAutomator** allows you to connect your Minecraft world to external systems using HTTP requests. This mod includes:
+**Happy http mod** allows you to connect your Minecraft world to your external world using HTTP requests. Can for example be used with home automation. Let's say you want a secret door in Minecraft to open when a a QR code is scanned, or when a motion sensor is triggered. Or you want to send an SMS when you enter a location in Minecraft, or trigger a redstone circuit. Only your imagination stops you from finding fun ways of using the happy http mod. 
 
-- **HTTP Receiver Block**: Sends a redstone signal when a webhook with the correct parameters is accessed. Ideal for starting automations in Minecraft from outside triggers.
-- **HTTP Sender Block**: Sends an HTTP request to a specified URL with parameters when it receives a redstone signal. Perfect for triggering automation on APIs, home automation systems, and more.
-
-### Use Cases
+### Usage
 
 - **HTTP Receiver Block**: 
   - **Starting Automations in Minecraft from Outside Triggers**: Use the HTTP Receiver Block to initiate Minecraft automations based on external events. For example, trigger in-game events from a smart home system when motion is detected, or start a Minecraft mechanism when a specific condition is met on an external server or service.
@@ -19,7 +26,9 @@ This Minecraft mod introduces two custom blocks that interact with webhooks and 
 
 ## Features
 
-- **Cross-Platform**: The webhook server is integrated into the mod and works on both Windows and Linux. It binds to the IP of the host machine on a configurable port.
+- **HTTP Receiver Block**: Sends a redstone signal when a webhook with the correct parameters is accessed. Ideal for starting automations in Minecraft from outside triggers.
+- **HTTP Sender Block**: Sends an HTTP request to a specified URL with parameters when it receives a redstone signal. Perfect for triggering automation on APIs, home automation systems, and more.
+- **Cross-Platform**: Integrated webhook server. Works on both Windows and Linux. It binds to the IP of the host machine on a configurable port.
 
 ## Installation
 
@@ -56,6 +65,15 @@ This Minecraft mod introduces two custom blocks that interact with webhooks and 
 3. **Set Up Redstone Circuits**:
    - Connect the HTTP Receiver Block to redstone dust and a redstone lamp or any other redstone mechanism.
    - Ensure the HTTP Sender Block is connected to a redstone input source (like a button or lever).
+
+## Contributing
+Guidelines for contributing to the project.
+
+Fork the repository.
+Create your feature branch (git checkout -b feature/AmazingFeature).
+Commit your changes (git commit -m 'Add some AmazingFeature').
+Push to the branch (git push origin feature/AmazingFeature).
+Open a pull request.
 
 ## Support
 
