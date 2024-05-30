@@ -32,8 +32,8 @@ This Minecraft mod introduces two custom blocks that interact with webhooks and 
 ## Usage
 
 1. **Configure the Webhook Server**:
-   - After the first run, a configuration file named `httpAutomator-config.json` will be generated in the Minecraft configuration directory (usually `.minecraft/config/`).
-   - Edit the `httpAutomator-config.json` file to set up the webhook server's IP address and port:
+   - After the first run, a configuration file named `happyhttpmod-config.json` will be generated in the Minecraft configuration directory (usually `.minecraft/config/`).
+   - Edit the `happyhttpmod-config.json` file to set up the webhook server's IP address and port:
      ```json
      {
        "webhookServerIP": "",
@@ -59,7 +59,7 @@ This Minecraft mod introduces two custom blocks that interact with webhooks and 
 
 ## Support
 
-If you encounter any issues or have questions, please open an issue on the [GitHub Issues](https://github.com/clapters/httpAutomator/issues) page.
+If you encounter any issues or have questions, please open an issue on the [GitHub Issues](https://github.com/clapters/happyhttpmod/issues) page.
 
 ## License
 
