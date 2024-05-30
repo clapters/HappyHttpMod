@@ -2,8 +2,11 @@ package com.clapter.httpautomator.client.gui;
 
 import com.clapter.httpautomator.Constants;
 import com.clapter.httpautomator.blockentity.HttpReceiverBlockEntity;
+import com.clapter.httpautomator.network.packet.SUpdateHttpReceiverValuesPacket;
+import com.clapter.httpautomator.platform.Services;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.MultilineTextField;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -21,7 +24,10 @@ public class HttpReceiverSettingsScreen extends Screen {
     private HttpReceiverBlockEntity blockEntity;
 
     private Button startButton;
-    private MultilineTextField textField;
+    private EditBox endpoint;
+
+    private String endpointText;
+
 
     public HttpReceiverSettingsScreen(HttpReceiverBlockEntity blockEntity) {
         super(TITLE);
@@ -37,17 +43,41 @@ public class HttpReceiverSettingsScreen extends Screen {
         this.topPos = (this.height - screenHeight) / 2;
         this.startButton = addRenderableWidget(startButton.builder(
                 START_TEXT, this::handleStartButton)
-                .bounds(leftPos, topPos, 20, 20)
+                .bounds(leftPos, topPos+10, 50, 20)
                 .build()
         );
+        this.endpoint = new EditBox(font, leftPos + 50, topPos + 30 - 24, 198, 20, Component.empty());
+        this.endpoint.setResponder(text -> {
+            endpointText = text;
+        });
+        endpoint.insertText(blockEntity.getValues().url);
+        addRenderableWidget(endpoint);
+
     }
 
     private void handleStartButton(Button button){
+        if(this.checkValues()){
+            //SEND UPDATE PACKET TO SERVER
+            HttpReceiverBlockEntity.Values values = blockEntity.getValues();
+            values.url = this.endpointText;
+            System.out.println("BUTTON: "+values.url);
+            Services.PACKET_HANDLER.sendPacketToServer(new SUpdateHttpReceiverValuesPacket(
+                    this.blockEntity.getBlockPos(),
+                    values));
+        }
+    }
 
+    private boolean checkValues(){
+        return endpointText != null && !endpointText.isEmpty();
     }
 
     @Override
     public void render(GuiGraphics $$0, int $$1, int $$2, float $$3) {
         super.render($$0, $$1, $$2, $$3);
+    }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
     }
 }

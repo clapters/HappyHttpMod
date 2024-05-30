@@ -41,5 +41,11 @@ public class CommonClass {
         httpServer.initHandlers();
     }
 
+    public static void onServerStopping(){
+        if(httpServer != null){
+            httpServer.stopServer();
+        }
+    }
+
 
 }

@@ -1,4 +1,4 @@
-package com.clapter.httpautomator.network;
+package com.clapter.httpautomator.network.packet;
 
 public class COpenScreenPacket {
 

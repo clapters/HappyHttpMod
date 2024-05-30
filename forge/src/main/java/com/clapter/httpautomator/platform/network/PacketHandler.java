@@ -1,11 +1,12 @@
 package com.clapter.httpautomator.platform.network;
 
 import com.clapter.httpautomator.Constants;
-import com.clapter.httpautomator.network.COpenScreenPacket;
-import com.clapter.httpautomator.platform.network.IPacketHandler;
+import com.clapter.httpautomator.network.packet.BasePacket;
+import com.clapter.httpautomator.network.packet.CSyncHttpReceiverValuesPacket;
+import com.clapter.httpautomator.network.packet.SUpdateHttpReceiverValuesPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.network.ChannelBuilder;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
@@ -26,6 +27,26 @@ public class PacketHandler implements IPacketHandler {
         //        .decoder(COpenScreenPacket::new)
         //        .consumerMainThread(COpenScreenPacket::handle)
         //        .add();
+        INSTANCE.messageBuilder(SUpdateHttpReceiverValuesPacket.class, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(SUpdateHttpReceiverValuesPacket::encode)
+                .decoder(SUpdateHttpReceiverValuesPacket::new)
+                .consumerMainThread(PacketHandler::handle)
+                .add();
+
+        INSTANCE.messageBuilder(CSyncHttpReceiverValuesPacket.class, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(CSyncHttpReceiverValuesPacket::encode)
+                .decoder(CSyncHttpReceiverValuesPacket::new)
+                .consumerMainThread(PacketHandler::handle)
+                .add();
+
+
+    }
+
+    //THE HANDLER METHOD FOR HANDLING PACKETS AFTER THEIR DECODING PROCESS
+    //HAS TO START HERE, SINCE THE CONTEXT OBJECT IS A FORGE CLASS
+    private static void handle(BasePacket packet, CustomPayloadEvent.Context context) {
+        context.enqueueWork(() -> packet.handle(new PacketContext(context)));
+        context.setPacketHandled(true);
     }
 
     @Override

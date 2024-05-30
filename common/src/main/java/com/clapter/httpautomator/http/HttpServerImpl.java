@@ -34,6 +34,14 @@ public class HttpServerImpl implements IHttpServer {
         });
     }
 
+    @Override
+    public void stopServer() {
+        if(server != null){
+            server.stop(1);
+            server = null;
+            //System.gc();
+        }
+    }
 
 
 }
