@@ -6,6 +6,7 @@ import com.clapter.httpautomator.network.packet.CSyncHttpReceiverValuesPacket;
 import com.clapter.httpautomator.platform.Services;
 import com.clapter.httpautomator.registry.ModBlockEntities;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.telemetry.events.WorldLoadEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,7 +35,6 @@ public class HttpReceiverBlock extends PoweredBlock implements EntityBlock {
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
     public HttpReceiverBlock(Properties $$0) {
-
         super($$0);
         this.registerDefaultState(
                 this.stateDefinition.any().setValue(POWERED, Boolean.valueOf(false))
@@ -46,14 +46,17 @@ public class HttpReceiverBlock extends PoweredBlock implements EntityBlock {
         super.onPlace($$0, $$1, $$2, $$3, $$4);
     }
 
+    public void onSignal(BlockState state, Level level, BlockPos pos){
+            BlockState $$7 = this.switchPowered(state, level, pos);
+            float $$8 = $$7.getValue(POWERED) ? 0.6F : 0.5F;
+            //level.playSound(null, $$2, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F, $$8);
+            //level.gameEvent($$3, $$7.getValue(POWERED) ? GameEvent.BLOCK_ACTIVATE : GameEvent.BLOCK_DEACTIVATE, $$2);
+
+    }
+
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (level.isClientSide) {
-            /*BlockState $$7 = this.switchPowered($$0, $$1, $$2);
-            float $$8 = $$7.getValue(POWERED) ? 0.6F : 0.5F;
-            $$1.playSound(null, $$2, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F, $$8);
-            $$1.gameEvent($$3, $$7.getValue(POWERED) ? GameEvent.BLOCK_ACTIVATE : GameEvent.BLOCK_DEACTIVATE, $$2);
-            return InteractionResult.CONSUME;*/
             if(level.getBlockEntity(pos) instanceof HttpReceiverBlockEntity entity){
                 if(!player.isCreative())return InteractionResult.FAIL;
                 Minecraft.getInstance().setScreen(new HttpReceiverSettingsScreen(entity));

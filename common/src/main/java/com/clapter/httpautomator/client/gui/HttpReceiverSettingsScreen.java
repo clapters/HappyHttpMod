@@ -60,7 +60,6 @@ public class HttpReceiverSettingsScreen extends Screen {
             //SEND UPDATE PACKET TO SERVER
             HttpReceiverBlockEntity.Values values = blockEntity.getValues();
             values.url = this.endpointText;
-            System.out.println("BUTTON: "+values.url);
             Services.PACKET_HANDLER.sendPacketToServer(new SUpdateHttpReceiverValuesPacket(
                     this.blockEntity.getBlockPos(),
                     values));

@@ -1,14 +1,18 @@
 package com.clapter.httpautomator.blockentity;
 
 import com.clapter.httpautomator.Constants;
+import com.clapter.httpautomator.block.HttpReceiverBlock;
+import com.clapter.httpautomator.http.handlers.HttpReceiverBlockHandler;
 import com.clapter.httpautomator.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class HttpReceiverBlockEntity extends BlockEntity {
+
 
     private final Values values;
 
@@ -17,22 +21,31 @@ public class HttpReceiverBlockEntity extends BlockEntity {
         this.values = new Values();
     }
 
+    public void onSignal(){
+        BlockState state = this.level.getBlockState(this.getBlockPos());
+        Block block = state.getBlock();
+        if(block instanceof HttpReceiverBlock receiver){
+            receiver.onSignal(state, this.level, this.getBlockPos());
+        }
+    }
+
     public void updateValues(Values values){
-        //System.out.println("OLD VALUE: "+this.values.url);
         this.values.updateValues(values);
         setChanged();
+        if(!this.getLevel().isClientSide)
+            new HttpReceiverBlockHandler(this, this.values.url);
     }
 
     public Values getValues(){
         return this.values;
     }
 
+
     @Override
     public void load(CompoundTag nbt) {
         super.load(nbt);
         CompoundTag compound = nbt.getCompound(Constants.MOD_ID);
         this.values.url = compound.getString("url");
-        System.out.println("LOAD: " +this.values.url);
     }
 
     @Override

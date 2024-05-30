@@ -9,15 +9,18 @@ import org.apache.http.HttpMessage;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HttpServerImpl implements IHttpServer {
 
     private HttpServer server;
 
-    private List<IHttpHandler> handlerList;
+    private Map<Integer, IHttpHandler> handlerMap;
 
     public HttpServerImpl(){
+        handlerMap = new HashMap<Integer, IHttpHandler>();
     }
 
     public boolean startServer() throws IOException {
@@ -27,11 +30,29 @@ public class HttpServerImpl implements IHttpServer {
         return true;
     }
 
+    @Override
     public void initHandlers(){
-        handlerList = ImplLoader.loadAll(IHttpHandler.class);
-        handlerList.forEach(handler -> {
-            server.createContext(handler.getUrl(), handler);
-        });
+        List<IHttpHandler> handlerList = ImplLoader.loadAll(IHttpHandler.class);
+        handlerList.forEach(this::registerHandler);
+    }
+
+    @Override
+    public void registerHandler(IHttpHandler handler) {
+        if(!handlerMap.containsKey(handler.getId())) {
+            registerAndPutInMap(handler);
+        }else{
+            //ALREADY CONTAINING A HANDLER FOR THAT ID (FOR THAT BLOCK IN OUR TEST)
+            //FOR NOW JUST OVERRIDE WITH NEW ONE
+
+            server.removeContext(handlerMap.get(handler.getId()).getUrl());
+            registerAndPutInMap(handler);
+
+        }
+    }
+
+    private void registerAndPutInMap(IHttpHandler handler) {
+        server.createContext(handler.getUrl(), handler);
+        handlerMap.put(handler.getId(), handler);
     }
 
     @Override

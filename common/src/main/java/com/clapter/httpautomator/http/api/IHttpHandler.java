@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface IHttpHandler extends HttpHandler {
 
+    int getId();
     String getUrl();
     List<String> httpMethods();
     default void handle(){

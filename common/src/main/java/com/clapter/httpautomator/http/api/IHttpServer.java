@@ -7,4 +7,5 @@ public interface IHttpServer {
     boolean startServer() throws IOException;
     void initHandlers();
     void stopServer();
+    void registerHandler(IHttpHandler handler);
 }

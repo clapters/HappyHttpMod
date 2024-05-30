@@ -10,9 +10,10 @@ import java.io.IOException;
 
 public class CommonClass {
 
-    private static IHttpServer httpServer;
+    public static final IHttpServer HTTP_SERVER = new HttpServerImpl();
 
     public static void init() {
+
         ModBlocks.registerBlocks();
         ModBlockEntities.registerBlockEntities();
         ModItems.registerItems();
@@ -20,9 +21,8 @@ public class CommonClass {
 
     //On Server Starting Callback. Is used for starting the HTTP-Server
     public static void onServerStarting(){
-        httpServer = new HttpServerImpl();
         try {
-            if(httpServer.startServer()){
+            if(HTTP_SERVER.startServer()){
                 Constants.LOG.info("HTTP Server started on: ");
             }
         }catch (IOException e){
@@ -35,16 +35,11 @@ public class CommonClass {
     }
 
     public static void onServerStarted(){
-        if(httpServer == null){
-            return;
-        }
-        httpServer.initHandlers();
+        HTTP_SERVER.initHandlers();
     }
 
     public static void onServerStopping(){
-        if(httpServer != null){
-            httpServer.stopServer();
-        }
+        HTTP_SERVER.stopServer();
     }
 
 
