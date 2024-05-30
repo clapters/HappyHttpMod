@@ -30,13 +30,40 @@ This Minecraft mod introduces two custom blocks that interact with webhooks and 
 - **HTTP Sender Block**: Sends an HTTP request to a specified URL with parameters when it receives a redstone signal. Perfect for triggering automation on APIs, home automation systems, and more.
 - **Cross-Platform**: Integrated webhook server. Works on both Windows and Linux. It binds to the IP of the host machine on a configurable port.
 
+
 ## Installation
 
-1. **Download the Mod**:
-   - Download the latest release of the mod from the [Releases](https://github.com/clapters/httpAutomator/releases) page.
+### Requirements
 
-2. **Add to Minecraft**:
-   - Copy the downloaded `.jar` file to your Minecraft `mods` folder.
+#### Client
+
+- Minecraft version 1.20.2 (roadmap: 1.19.4, 1.19.2, 1.18.2)
+- Forge version X.X.X
+- Fabric version X.X.X
+
+#### Server
+
+- Minecraft Server version 1.20.2 (roadmap: 1.19.4, 1.19.2, 1.18.2)
+- Minecraft Spigot Server version 1.20.2 (roadmap: 1.19.4, 1.19.2, 1.18.2)
+
+
+### Steps
+
+1. **Download the Mod**:
+   - Download the latest release of the mod from the [Releases](https://github.com/clapters/happyhttpmod/releases) page.
+
+2. **Install Minecraft Forge:**
+   Download and install the appropriate version of Minecraft Forge from [Forge's official site](https://files.minecraftforge.net/).
+
+3. **Add the Mod to Minecraft:**
+   - Navigate to your Minecraft installation folder.
+   - Open the `mods` folder (create it if it doesn't exist).
+   - Place the downloaded mod `.jar` file into the `mods` folder.
+
+4. **Launch Minecraft:**
+   - Open the Minecraft Launcher.
+   - Select the Forge profile.
+   - Start the game.
 
 ## Usage
 
