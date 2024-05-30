@@ -43,7 +43,7 @@ public class HttpAutomator {
     }
 
     private void onFMLCommonSetup(FMLCommonSetupEvent e){
-        e.enqueueWork(PacketHandler::register);
+        e.enqueueWork(CommonClass::registerPackets);
     }
 
 }

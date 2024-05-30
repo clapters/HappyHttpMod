@@ -12,11 +12,6 @@ public class TestHttpHandler implements IHttpHandler {
     public TestHttpHandler() {}
 
     @Override
-    public int getId() {
-        return -1;
-    }
-
-    @Override
     public String getUrl() {
         return "/test";
     }

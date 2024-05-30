@@ -1,9 +1,11 @@
 package com.clapter.httpautomator.platform.network;
 
 import com.clapter.httpautomator.Constants;
+import com.clapter.httpautomator.network.PacketDirection;
 import com.clapter.httpautomator.network.packet.BasePacket;
 import com.clapter.httpautomator.network.packet.CSyncHttpReceiverValuesPacket;
 import com.clapter.httpautomator.network.packet.SUpdateHttpReceiverValuesPacket;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.network.CustomPayloadEvent;
@@ -11,6 +13,10 @@ import net.minecraftforge.network.ChannelBuilder;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.SimpleChannel;
+
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class PacketHandler implements IPacketHandler {
 
@@ -21,32 +27,22 @@ public class PacketHandler implements IPacketHandler {
             .networkProtocolVersion(1)
             .simpleChannel();
 
-    public static void register(){
-        //INSTANCE.messageBuilder(COpenScreenPacket.class, NetworkDirection.PLAY_TO_CLIENT)
-        //        .encoder(COpenScreenPacket::encode)
-        //        .decoder(COpenScreenPacket::new)
-        //        .consumerMainThread(COpenScreenPacket::handle)
-        //        .add();
-        INSTANCE.messageBuilder(SUpdateHttpReceiverValuesPacket.class, NetworkDirection.PLAY_TO_SERVER)
-                .encoder(SUpdateHttpReceiverValuesPacket::encode)
-                .decoder(SUpdateHttpReceiverValuesPacket::new)
-                .consumerMainThread(PacketHandler::handle)
-                .add();
-
-        INSTANCE.messageBuilder(CSyncHttpReceiverValuesPacket.class, NetworkDirection.PLAY_TO_CLIENT)
-                .encoder(CSyncHttpReceiverValuesPacket::encode)
-                .decoder(CSyncHttpReceiverValuesPacket::new)
-                .consumerMainThread(PacketHandler::handle)
-                .add();
-
-
-    }
-
     //THE HANDLER METHOD FOR HANDLING PACKETS AFTER THEIR DECODING PROCESS
     //HAS TO START HERE, SINCE THE CONTEXT OBJECT IS A FORGE CLASS
     private static void handle(BasePacket packet, CustomPayloadEvent.Context context) {
         context.enqueueWork(() -> packet.handle(new PacketContext(context)));
         context.setPacketHandled(true);
+    }
+
+    @Override
+    public <T extends BasePacket> void registerPacket(Class<T> packetClass, BiConsumer<T, FriendlyByteBuf> encode,
+                                                      Function<FriendlyByteBuf, T> decode, PacketDirection direction) {
+        NetworkDirection dir = this.getNetworkDirectionFromPacketDirection(direction);
+        INSTANCE.messageBuilder(packetClass, dir)
+                .encoder(encode)
+                .decoder(decode)
+                .consumerMainThread(PacketHandler::handle)
+                .add();
     }
 
     @Override
@@ -58,4 +54,12 @@ public class PacketHandler implements IPacketHandler {
     public void sendPacketToServer(Object packet) {
         INSTANCE.send(packet, PacketDistributor.SERVER.noArg());
     }
+
+    private NetworkDirection getNetworkDirectionFromPacketDirection(PacketDirection direction){
+        return switch (direction) {
+            case PLAY_TO_CLIENT -> NetworkDirection.PLAY_TO_CLIENT;
+            case PLAY_TO_SERVER -> NetworkDirection.PLAY_TO_SERVER;
+        };
+    }
+
 }

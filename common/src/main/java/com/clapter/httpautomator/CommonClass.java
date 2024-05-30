@@ -5,6 +5,7 @@ import com.clapter.httpautomator.http.api.IHttpServer;
 import com.clapter.httpautomator.registry.ModBlockEntities;
 import com.clapter.httpautomator.registry.ModBlocks;
 import com.clapter.httpautomator.registry.ModItems;
+import com.clapter.httpautomator.registry.ModNetworkPackets;
 
 import java.io.IOException;
 
@@ -17,6 +18,10 @@ public class CommonClass {
         ModBlocks.registerBlocks();
         ModBlockEntities.registerBlockEntities();
         ModItems.registerItems();
+    }
+
+    public static void registerPackets(){
+        ModNetworkPackets.registerPackets();
     }
 
     //On Server Starting Callback. Is used for starting the HTTP-Server

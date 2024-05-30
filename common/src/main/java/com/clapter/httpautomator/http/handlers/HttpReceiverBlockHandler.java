@@ -45,13 +45,6 @@ public class HttpReceiverBlockHandler implements IHttpHandler {
     }
 
     @Override
-    public int getId() {
-        //THE IDEA IS TO ASSIGN THE POSITION OF THE ENTITY AS IT'S ID
-        //MIGHT NEED A BETTER WAY, BUT IT WORKS FOR TESTS
-        return 0;
-    }
-
-    @Override
     public String getUrl() {
         return this.url;
     }
