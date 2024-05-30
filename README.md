@@ -109,11 +109,11 @@ This Minecraft mod introduces two custom blocks that interact with webhooks and 
 ## Contributing
 Guidelines for contributing to the project.
 
-Fork the repository.
-Create your feature branch (git checkout -b feature/AmazingFeature).
-Commit your changes (git commit -m 'Add some AmazingFeature').
-Push to the branch (git push origin feature/AmazingFeature).
-Open a pull request.
+- Fork the repository.
+- Create your feature branch (git checkout -b feature/AmazingFeature).
+- Commit your changes (git commit -m 'Add some AmazingFeature').
+- Push to the branch (git push origin feature/AmazingFeature).
+- Open a pull request.
 
 ## Support
 
