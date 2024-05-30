@@ -66,6 +66,19 @@ This Minecraft mod introduces two custom blocks that interact with webhooks and 
    - Connect the HTTP Receiver Block to redstone dust and a redstone lamp or any other redstone mechanism.
    - Ensure the HTTP Sender Block is connected to a redstone input source (like a button or lever).
 
+## Configuration
+**Configure the Webhook Server**:
+   - After the first run, a configuration file named `happyhttpmod-config.json` will be generated in the Minecraft configuration directory (usually `.minecraft/config/`).
+   - Edit the `happyhttpmod-config.json` file to set up the webhook server's IP address and port:
+     ```json
+     {
+       "webhookServerIP": "",
+       "webhookServerPort": 4567
+     }
+     ```
+   - If `webhookServerIP` is left blank or missing, the server will use the IP of the local machine. If your machine has multiple IP addresses, specify the desired IP address to bind the server to that specific IP.
+
+
 ## Contributing
 Guidelines for contributing to the project.
 
