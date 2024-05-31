@@ -3,8 +3,6 @@ package com.clapter.httpautomator.platform.network;
 import com.clapter.httpautomator.Constants;
 import com.clapter.httpautomator.network.PacketDirection;
 import com.clapter.httpautomator.network.packet.BasePacket;
-import com.clapter.httpautomator.network.packet.CSyncHttpReceiverValuesPacket;
-import com.clapter.httpautomator.network.packet.SUpdateHttpReceiverValuesPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -15,7 +13,6 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.SimpleChannel;
 
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class PacketHandler implements IPacketHandler {

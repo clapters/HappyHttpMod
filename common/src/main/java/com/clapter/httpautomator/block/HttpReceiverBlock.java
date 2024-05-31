@@ -1,17 +1,12 @@
 package com.clapter.httpautomator.block;
 
 import com.clapter.httpautomator.blockentity.HttpReceiverBlockEntity;
-import com.clapter.httpautomator.client.gui.HttpReceiverSettingsScreen;
-import com.clapter.httpautomator.network.packet.CSyncHttpReceiverValuesPacket;
+import com.clapter.httpautomator.network.packet.CHttpReceiverOpenGuiPacket;
 import com.clapter.httpautomator.platform.Services;
 import com.clapter.httpautomator.registry.ModBlockEntities;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.telemetry.events.WorldLoadEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -23,7 +18,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,7 +58,7 @@ public class HttpReceiverBlock extends PoweredBlock implements EntityBlock {
         }else{
             if(level.getBlockEntity(pos) instanceof HttpReceiverBlockEntity entity) {
                 if(!player.isCreative())return InteractionResult.FAIL;
-                Services.PACKET_HANDLER.sendPacketToPlayer(new CSyncHttpReceiverValuesPacket(pos, entity.getValues()), (ServerPlayer)player);
+                Services.PACKET_HANDLER.sendPacketToPlayer(new CHttpReceiverOpenGuiPacket(pos, entity.getValues()), (ServerPlayer)player);
             }
         }
         return InteractionResult.SUCCESS;

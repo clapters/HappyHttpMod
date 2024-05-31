@@ -13,7 +13,7 @@ public class TestHttpHandler implements IHttpHandler {
 
     @Override
     public String getUrl() {
-        return "/test";
+        return "/t";
     }
 
     @Override

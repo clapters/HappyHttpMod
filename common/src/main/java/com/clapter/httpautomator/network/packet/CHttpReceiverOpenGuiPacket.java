@@ -9,17 +9,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class CSyncHttpReceiverValuesPacket extends BasePacket{
+public class CHttpReceiverOpenGuiPacket extends BasePacket{
 
     private final BlockPos entityPos;
     private final HttpReceiverBlockEntity.Values values;
 
-    public CSyncHttpReceiverValuesPacket(BlockPos pos, HttpReceiverBlockEntity.Values endpoint){
+    public CHttpReceiverOpenGuiPacket(BlockPos pos, HttpReceiverBlockEntity.Values endpoint){
         this.entityPos = pos;
         this.values = endpoint;
     }
 
-    public CSyncHttpReceiverValuesPacket(FriendlyByteBuf buf){
+    public CHttpReceiverOpenGuiPacket(FriendlyByteBuf buf){
         this(buf.readBlockPos(), HttpReceiverBlockEntity.Values.readBuffer(buf));
     }
 
