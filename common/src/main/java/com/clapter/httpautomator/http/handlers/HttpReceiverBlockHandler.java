@@ -69,11 +69,31 @@ public class HttpReceiverBlockHandler implements IHttpHandler {
     }
 
     private void writeResponse(HttpExchange exchange) throws IOException {
-        String response = "OK";
-        exchange.sendResponseHeaders(200, response.length());
-        OutputStream os = exchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
+        String redirect = this.getRedirect(exchange);
+        if(redirect != null){
+            exchange.getResponseHeaders().add("Location", redirect);
+            exchange.sendResponseHeaders(308, response.length());
+        }else{
+            String response = "OK";
+            OutputStream os = exchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }
+        exchange.close();
+    }
+
+    //REDIRECTS CLIENT, IF ONE OF THE BLOCKS HAS A REDIRECTION SETTING
+    //BECAUSE OF MENY BLOCKS HAVING SAME ENDPOINT URL, IT TAKES THE LAST FOUND REDIRECT
+    //URL.
+    private String getRedirect(HttpExchange exchange) throws IOException {
+        String redirectUrl = null;
+        for(HttpReceiverBlockEntity entity : this.entityList){
+            if(entity.getValues().redirectClientUrl != null &&
+                    !entity.getValues().redirectClientUrl.isEmpty()){
+                redirectUrl = entity.getValues().redirectClientUrl;
+            }
+        }
+        return redirectUrl;
     }
 
 }
