@@ -75,8 +75,14 @@ public class HttpServerImpl implements IHttpServer {
     }
 
     private void registerAndPutInMap(IHttpHandler handler) {
-        server.createContext(handler.getUrl(), handler);
+        String url = this.validateUrl(handler.getUrl());
+        server.createContext(url, handler);
         handlerMap.put(handler.getUrl(), handler);
+    }
+
+    private String validateUrl(String url) {
+        if(!url.startsWith("/")) return "/"+url;
+        return url;
     }
 
     @Override

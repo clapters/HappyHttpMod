@@ -12,6 +12,9 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HttpSenderSettingsScreen extends Screen {
 
     private static Component TITLE = Component.translatable("gui."+ Constants.MOD_ID + ".http_sender_settings_screen");
@@ -25,6 +28,12 @@ public class HttpSenderSettingsScreen extends Screen {
 
     private Button startButton;
     private EditBox endpoint;
+
+    private Button saveCountButton;
+    private EditBox countInput;
+    private final List<EditBox> parameterFields = new ArrayList<>();
+    private final List<EditBox> parameterValuesFields = new ArrayList<>();
+    private int numberOfFields = 0;
 
     private String endpointText;
 
@@ -53,6 +62,31 @@ public class HttpSenderSettingsScreen extends Screen {
         endpoint.insertText(blockEntity.getValues().url);
         addRenderableWidget(endpoint);
 
+        countInput = new EditBox(this.font, this.width / 2 - 50, 20, 100, 20, Component.literal("Count"));
+        this.addRenderableWidget(countInput);
+        this.saveCountButton = this.addRenderableWidget(saveCountButton.builder(
+                Component.literal("Set Count"),button -> {
+                    numberOfFields = Integer.parseInt(countInput.getValue());
+                    createInputFields(numberOfFields);
+                }).bounds(this.width / 2 - 50, 50, 100, 20).build());
+    }
+
+    private void createInputFields(int numberOfFields) {
+        // Clear existing input fields
+        this.clearWidgets();
+        this.init(); // Re-add the initial widgets (countInput and button)
+
+        this.parameterFields.clear();
+
+        // Create new input fields based on count
+        for (int i = 0; i < numberOfFields; i++) {
+            EditBox inputField = new EditBox(this.font, this.width / 2 - 50, 80 + i * 30, 100, 20, Component.literal("Parameter " + (i + 1)));
+            EditBox valueField = new EditBox(this.font, this.width / 2 - +50, 80 + i * 30, 100, 20, Component.literal("Value " + (i + 1)));
+            this.parameterFields.add(inputField);
+            this.parameterValuesFields.add(valueField);
+            this.addRenderableWidget(inputField);
+            this.addRenderableWidget(valueField);
+        }
     }
 
     private void handleStartButton(Button button){

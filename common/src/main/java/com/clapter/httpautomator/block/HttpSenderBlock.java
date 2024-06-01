@@ -39,6 +39,7 @@ public class HttpSenderBlock extends Block implements EntityBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (!level.isClientSide) {
+
             if(level.getBlockEntity(pos) instanceof HttpSenderBlockEntity entity) {
                 if(!player.isCreative())return InteractionResult.FAIL;
                 Services.PACKET_HANDLER.sendPacketToPlayer(new CHttpSenderOpenGuiPacket(pos, entity.getValues()), (ServerPlayer)player);

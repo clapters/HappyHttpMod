@@ -18,7 +18,7 @@ public class HttpSenderBlockEntity extends BlockEntity {
     private final HttpSenderBlockEntity.Values values;
 
     public HttpSenderBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.httpReceiverBlockEntity.get().get(), pos, state);
+        super(ModBlockEntities.httpSenderBlockEntity.get().get(), pos, state);
         this.values = new HttpSenderBlockEntity.Values();
     }
 
