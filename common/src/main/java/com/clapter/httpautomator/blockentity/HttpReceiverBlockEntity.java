@@ -15,26 +15,76 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class HttpReceiverBlockEntity extends BlockEntity {
 
-
+    private long lastPoweredMilli;
+    private long lastPoweredTick;
     private final Values values;
+    private boolean isPowerOn;
 
     public HttpReceiverBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.httpReceiverBlockEntity.get().get(), pos, state);
         this.values = new Values();
-        //this.values.poweredType = EnumPoweredType.SWITCH;
-        //this.values.timerUnit = EnumTimerUnit.TICKS;
     }
 
     public void onSignal(){
+        switch (values.poweredType){
+            case SWITCH -> this.switchPowered();
+            case TIMER -> this.startTimer();
+        }
+    }
+
+    private void startTimer(){
+        lastPoweredMilli = System.currentTimeMillis();
+        lastPoweredTick = this.level.getGameTime();
+    }
+
+    private void switchPowered(){
         BlockState state = this.level.getBlockState(this.getBlockPos());
         Block block = state.getBlock();
-        if(block instanceof HttpReceiverBlock receiver){
-            receiver.onSignal(state, this.level, this.getBlockPos());
+        if(block instanceof HttpReceiverBlock receiver) {
+            receiver.switchSignal(state, this.level, this.getBlockPos());
+            isPowerOn = state.getValue(HttpReceiverBlock.POWERED);
         }
+    }
+
+    private void setBlockPowered(boolean powered){
+        BlockState state = this.level.getBlockState(this.getBlockPos());
+        Block block = state.getBlock();
+        if(block instanceof HttpReceiverBlock receiver) {
+            receiver.setPowered(state, this.level, this.getBlockPos(), powered);
+            isPowerOn = state.getValue(HttpReceiverBlock.POWERED);
+        }
+    }
+
+    public void tick(){
+        if(!this.values.poweredType.equals(EnumPoweredType.TIMER))return;
+        switch (this.values.timerUnit){
+            case SECONDS -> {
+                if(isTimeUnder(System.currentTimeMillis(), this.lastPoweredMilli, this.values.timer*1000)){
+                    if(!isPowerOn)setBlockPowered(true);
+                }else{
+                    if(isPowerOn)setBlockPowered(false);
+                }
+            }
+            case TICKS -> {
+                if(isTimeUnder(this.level.getGameTime(), this.lastPoweredTick, this.values.timer)){
+                    if(!isPowerOn)setBlockPowered(true);
+                }else{
+                    if(isPowerOn)setBlockPowered(false);
+                }
+            }
+        }
+    }
+
+    private boolean isTimeUnder(long current, long last, float value){
+        return current - last <= value;
     }
 
     public void updateValues(Values values){
         this.values.updateValues(values);
+        //TURN BLOCK OFF, WHEN POWER SET TO TIMER
+        if(values.poweredType.equals(EnumPoweredType.TIMER)){
+            this.setBlockPowered(false);
+        }
         setChanged();
         if(!this.getLevel().isClientSide) {
             HttpReceiverBlockHandler.create(this, this.values.url);

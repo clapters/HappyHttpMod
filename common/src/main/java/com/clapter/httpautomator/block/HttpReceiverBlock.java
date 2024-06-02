@@ -14,6 +14,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -40,12 +42,18 @@ public class HttpReceiverBlock extends PoweredBlock implements EntityBlock {
         super.onPlace($$0, $$1, $$2, $$3, $$4);
     }
 
-    public void onSignal(BlockState state, Level level, BlockPos pos){
+    public void switchSignal(BlockState state, Level level, BlockPos pos){
             BlockState $$7 = this.switchPowered(state, level, pos);
             float $$8 = $$7.getValue(POWERED) ? 0.6F : 0.5F;
             //level.playSound(null, $$2, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F, $$8);
             //level.gameEvent($$3, $$7.getValue(POWERED) ? GameEvent.BLOCK_ACTIVATE : GameEvent.BLOCK_DEACTIVATE, $$2);
 
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState $$1, BlockEntityType<T> $$2) {
+        return level.isClientSide ? null : (level1, pos, state1, blockEntity) -> { ((HttpReceiverBlockEntity)blockEntity).tick(); };
     }
 
     @Override
@@ -71,13 +79,18 @@ public class HttpReceiverBlock extends PoweredBlock implements EntityBlock {
         return $$0;
     }
 
+    public void setPowered(BlockState state, Level level, BlockPos blockPos, boolean powered) {
+        state = state.setValue(POWERED, powered);
+        level.setBlock(blockPos, state, 3);
+        this.updateNeighbours(state, level, blockPos);
+    }
+
     @Override
     public void onRemove(BlockState $$0, Level $$1, BlockPos $$2, BlockState $$3, boolean $$4) {
         if (!$$4 && !$$0.is($$3.getBlock())) {
             if ($$0.getValue(POWERED)) {
                 this.updateNeighbours($$0, $$1, $$2);
             }
-
             super.onRemove($$0, $$1, $$2, $$3, $$4);
         }
     }
@@ -102,4 +115,5 @@ public class HttpReceiverBlock extends PoweredBlock implements EntityBlock {
     public BlockEntity newBlockEntity(BlockPos var1, BlockState var2) {
         return ModBlockEntities.httpReceiverBlockEntity.get().get().create(var1, var2);
     }
+
 }
