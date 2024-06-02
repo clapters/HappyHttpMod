@@ -75,6 +75,7 @@ public class HttpReceiverBlockHandler implements IHttpHandler {
             exchange.sendResponseHeaders(308, 0);
         }else{
             String response = "OK";
+            exchange.sendResponseHeaders(200, response.length());
             OutputStream os = exchange.getResponseBody();
             os.write(response.getBytes());
             os.close();
