@@ -19,4 +19,12 @@ public class JsonUtils {
         return parameters;
     }
 
+    public static String parametersFromMapToString(Map<String, String> parameterMap){
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        for (Map.Entry<String, String> entry : parameterMap.entrySet()) {
+            builder.add(entry.getKey(), entry.getValue());
+        }
+        return builder.build().toString();
+    }
+
 }

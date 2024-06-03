@@ -3,6 +3,7 @@ package com.clapter.httpautomator.client.gui;
 import com.clapter.httpautomator.Constants;
 import com.clapter.httpautomator.blockentity.HttpReceiverBlockEntity;
 import com.clapter.httpautomator.blockentity.HttpSenderBlockEntity;
+import com.clapter.httpautomator.client.gui.widgets.ScrollableWidget;
 import com.clapter.httpautomator.network.packet.SUpdateHttpReceiverValuesPacket;
 import com.clapter.httpautomator.network.packet.SUpdateHttpSenderValuesPacket;
 import com.clapter.httpautomator.platform.Services;
@@ -11,9 +12,12 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HttpSenderSettingsScreen extends Screen {
 
@@ -26,9 +30,11 @@ public class HttpSenderSettingsScreen extends Screen {
     private int topPos;
     private HttpSenderBlockEntity blockEntity;
 
+    private boolean forceMapInit;
     private Button startButton;
     private EditBox endpoint;
-
+    private ScrollableWidget scrollablePanel;
+    private String countInputAsString = "";
     private Button saveCountButton;
     private EditBox countInput;
     private final List<EditBox> parameterFields = new ArrayList<>();
@@ -43,6 +49,23 @@ public class HttpSenderSettingsScreen extends Screen {
         screenWidth = 176;
         screenHeight = 166;
         this.blockEntity = blockEntity;
+        forceMapInit = true;
+    }
+
+    private void readParameterMap() {
+        Map<String, String> parameterMap = this.blockEntity.getValues().parameterMap;
+        if(!parameterMap.isEmpty()){
+            for(Map.Entry<String, String> entry : parameterMap.entrySet()){
+                //System.out.println(entry.getKey() + ": " + entry.getValue());
+                EditBox parBox = new EditBox(this.font, leftPos+90, topPos + 100, 50, 20, Component.literal("Parameter"));
+                EditBox valBox = new EditBox(this.font, leftPos +180, topPos + 100, 50, 20, Component.literal("Value"));
+                this.parameterFields.add(parBox);
+                this.parameterFields.add(valBox);
+                parBox.setValue(entry.getKey());
+                valBox.setValue(entry.getValue());
+
+            }
+        }
     }
 
     @Override
@@ -51,42 +74,58 @@ public class HttpSenderSettingsScreen extends Screen {
         this.leftPos = (this.width - screenWidth) / 2;
         this.topPos = (this.height - screenHeight) / 2;
         this.startButton = addRenderableWidget(startButton.builder(
-                START_TEXT, this::handleStartButton)
-                .bounds(leftPos, topPos+10, 50, 20)
+                        START_TEXT, this::handleStartButton)
+                .bounds(leftPos+74, topPos+200, 50, 20)
                 .build()
         );
-        this.endpoint = new EditBox(font, leftPos + 50, topPos + 30 - 24, 198, 20, Component.empty());
+        if(this.forceMapInit) {
+            this.readParameterMap();
+            this.forceMapInit = false;
+        }
+        this.endpoint = new EditBox(font, leftPos + 50, topPos + 6, 198, 20, Component.empty());
         this.endpoint.setResponder(text -> {
             endpointText = text;
         });
         endpoint.insertText(blockEntity.getValues().url);
         addRenderableWidget(endpoint);
 
-        countInput = new EditBox(this.font, this.width / 2 - 50, 20, 100, 20, Component.literal("Count"));
+        countInput = new EditBox(this.font, leftPos + 50, topPos + 30, 100, 20, Component.literal("Count"));
+        this.countInput.setResponder(text -> {
+            countInputAsString = text;
+        });
         this.addRenderableWidget(countInput);
         this.saveCountButton = this.addRenderableWidget(saveCountButton.builder(
                 Component.literal("Set Count"),button -> {
+                    if(countInputAsString.isEmpty())return;
                     numberOfFields = Integer.parseInt(countInput.getValue());
                     createInputFields(numberOfFields);
-                }).bounds(this.width / 2 - 50, 50, 100, 20).build());
+                }).bounds(leftPos + 150, topPos + 30, 100, 20).build());
+
+        if(!this.parameterFields.isEmpty()) {
+            this.drawParameters();
+        }
+    }
+
+    private void drawParameters(){
+        this.scrollablePanel = new ScrollableWidget(leftPos + 50, topPos + 60, 100, 100, this.parameterFields);
+        this.addRenderableWidget(scrollablePanel);
     }
 
     private void createInputFields(int numberOfFields) {
-        // Clear existing input fields
-        this.clearWidgets();
-        this.init(); // Re-add the initial widgets (countInput and button)
-
+        List<EditBox> containigBox = new ArrayList<>(this.parameterFields);
         this.parameterFields.clear();
-
-        // Create new input fields based on count
-        for (int i = 0; i < numberOfFields; i++) {
-            EditBox inputField = new EditBox(this.font, this.width / 2 - 50, 80 + i * 30, 100, 20, Component.literal("Parameter " + (i + 1)));
-            EditBox valueField = new EditBox(this.font, this.width / 2 - +50, 80 + i * 30, 100, 20, Component.literal("Value " + (i + 1)));
-            this.parameterFields.add(inputField);
-            this.parameterValuesFields.add(valueField);
-            this.addRenderableWidget(inputField);
-            this.addRenderableWidget(valueField);
+        for(int i = 0; i < numberOfFields; i++){
+            EditBox parBox = new EditBox(this.font, leftPos+90, topPos + 100, 50, 20, Component.literal("Parameter"));
+            EditBox valBox = new EditBox(this.font, leftPos +180, topPos + 100, 50, 20, Component.literal("Value"));
+            this.parameterFields.add(parBox);
+            this.parameterFields.add(valBox);
+            if(containigBox.size()/2 > i){
+                parBox.setValue(containigBox.get(i).getValue());
+                valBox.setValue(containigBox.get(i+1).getValue());
+            }
         }
+        this.clearWidgets();
+        this.init();
     }
 
     private void handleStartButton(Button button){
@@ -94,10 +133,29 @@ public class HttpSenderSettingsScreen extends Screen {
             //SEND UPDATE PACKET TO SERVER
             HttpSenderBlockEntity.Values values = blockEntity.getValues();
             values.url = this.endpointText;
+            if(this.scrollablePanel != null){
+                values.parameterMap = this.getParameterValues();
+            }
             Services.PACKET_HANDLER.sendPacketToServer(new SUpdateHttpSenderValuesPacket(
                     this.blockEntity.getBlockPos(),
                     values));
         }
+    }
+
+    private Map<String, String> getParameterValues(){
+        return getParameterValuesFromScrollable(this.scrollablePanel);
+    }
+
+    @NotNull
+    static Map<String, String> getParameterValuesFromScrollable(ScrollableWidget scrollablePanel) {
+        List<EditBox> input = scrollablePanel.getInputBoxes();
+        Map<String, String> parameterMap = new HashMap<String, String>();
+        for(int i = 0; i < input.size(); i+=2){
+            if(!input.get(i).getValue().isEmpty() && !input.get(i+1).getValue().isEmpty()){
+                parameterMap.put(input.get(i).getValue(), input.get(i+1).getValue());
+            }
+        }
+        return parameterMap;
     }
 
     private boolean checkValues(){

@@ -17,11 +17,11 @@ public class HttpClientImpl implements IHttpClient {
         try {
             HttpClient client = HttpClient.newHttpClient();
 
-            String requestBody = "{\"key1\":\"value1\", \"key2\":\"value2\"}";
+            //String requestBody = "{\"key1\":\"value1\", \"key2\":\"value2\"}";
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(url))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
+                    .POST(HttpRequest.BodyPublishers.ofString(parameters, StandardCharsets.UTF_8))
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());

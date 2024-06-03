@@ -15,6 +15,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.*;
@@ -138,20 +139,20 @@ public class HttpReceiverSettingsScreen extends Screen {
                             , (but, value) -> { this.timerUnit = value; });
             addRenderableWidget(enumButton1);
 
-            this.parameterCountInput = new EditBox(this.font, leftPos, topPos + 100, 80, 20, Component.literal("Count"));
-            this.parameterCountInput.setResponder(text -> {
-                numberOfFieldsAsString = text;
-            });
-            this.addRenderableWidget(parameterCountInput);
-            this.saveParameterCountButton = this.addRenderableWidget(saveParameterCountButton.builder(
-                    Component.literal("Set Count"),(button) -> {
-                        if(numberOfFieldsAsString.isEmpty())return;
-                        numberOfFields = Integer.parseInt(numberOfFieldsAsString);
-                        createInputFields(numberOfFields);
-                    }).bounds(leftPos+100, topPos + 100, 100, 20).build());
 
             this.timer.insertText(this.timerText);
         }
+        this.parameterCountInput = new EditBox(this.font, leftPos, topPos + 100, 80, 20, Component.literal("Count"));
+        this.parameterCountInput.setResponder(text -> {
+            numberOfFieldsAsString = text;
+        });
+        this.addRenderableWidget(parameterCountInput);
+        this.saveParameterCountButton = this.addRenderableWidget(saveParameterCountButton.builder(
+                Component.literal("Set Count"),(button) -> {
+                    if(numberOfFieldsAsString.isEmpty())return;
+                    numberOfFields = Integer.parseInt(numberOfFieldsAsString);
+                    createInputFields(numberOfFields);
+                }).bounds(leftPos+100, topPos + 100, 100, 20).build());
 
         if(!this.parameterFields.isEmpty()) {
             this.drawParameters();
@@ -218,7 +219,13 @@ public class HttpReceiverSettingsScreen extends Screen {
     }
 
     private Map<String, String> getParameterValues(){
-        List<EditBox> input = this.scrollablePanel.getInputBoxes();
+        return getParameterValuesFromScrollable(this.scrollablePanel);
+    }
+
+    //TODO: MOve to base
+    @NotNull
+    static Map<String, String> getParameterValuesFromScrollable(ScrollableWidget scrollablePanel) {
+        List<EditBox> input = scrollablePanel.getInputBoxes();
         Map<String, String> parameterMap = new HashMap<String, String>();
         for(int i = 0; i < input.size(); i+=2){
             if(!input.get(i).getValue().isEmpty() && !input.get(i+1).getValue().isEmpty()){
