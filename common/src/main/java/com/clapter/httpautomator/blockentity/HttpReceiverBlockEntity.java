@@ -167,6 +167,7 @@ public class HttpReceiverBlockEntity extends BlockEntity {
             this.timer = values.timer;
             this.timerUnit = values.timerUnit;
             this.poweredType = values.poweredType;
+            this.parameterMap = values.parameterMap;
         }
 
     }

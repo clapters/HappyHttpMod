@@ -3,8 +3,9 @@ package com.clapter.httpautomator.http.handlers;
 import com.clapter.httpautomator.CommonClass;
 import com.clapter.httpautomator.blockentity.HttpReceiverBlockEntity;
 import com.clapter.httpautomator.http.api.IHttpHandler;
+import com.clapter.httpautomator.utils.JsonUtils;
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import net.minecraft.core.BlockPos;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,7 +33,7 @@ public class HttpReceiverBlockHandler implements IHttpHandler {
                 receiverHandler.addBlockEntity(entity);
                 return;
             }
-            //ERROR BECAUSE URL ALREADY EXISTS
+            //ERROR BECAUSE URL ALREADY EXISTS AND IS NOT A RECEIVER HANDLER
             return;
         }
         HttpReceiverBlockHandler newHandler = new HttpReceiverBlockHandler(entity, validatedUrl);
@@ -64,8 +65,49 @@ public class HttpReceiverBlockHandler implements IHttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        entityList.forEach(HttpReceiverBlockEntity::onSignal);
+        entityList.forEach((blockEntity) -> {
+            if(this.shouldEntityBePowered(exchange, blockEntity)){
+                blockEntity.onSignal();
+            }
+        });
         this.writeResponse(exchange);
+    }
+
+    private boolean shouldEntityBePowered(HttpExchange exchange, HttpReceiverBlockEntity entity){
+        try {
+            Map<String, String> params = getAllParameters(exchange);
+            if(params.isEmpty()){
+                return entity.getValues().parameterMap.isEmpty();
+            }
+            return this.allParametersValidForEntity(params, entity);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Map<String, String> getAllParameters(HttpExchange exchange) throws IOException {
+        Map<String, String> parameters = new HashMap<>();
+        // Get POST parameters
+        if ("post".equalsIgnoreCase(exchange.getRequestMethod())) {
+            InputStream requestBody = exchange.getRequestBody();
+            parameters.putAll(parseQueryString(exchange.getRequestHeaders(), requestBody));
+        }
+        return parameters;
+    }
+
+    private Map<String, String> parseQueryString(Headers requestHeaders, InputStream requestBody) {
+        //TODO: CHECK IF REQUEST BODY IS VALID JSON
+        return JsonUtils.getParametersAsMap(requestBody);
+    }
+
+    private boolean allParametersValidForEntity(Map<String, String> params, HttpReceiverBlockEntity entity) {
+        for(Map.Entry<String, String> entry : entity.getValues().parameterMap.entrySet()){
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if(!params.containsKey(key)) return false;
+            else if(!params.get(key).equals(value)) return false;
+        }
+        return true;
     }
 
     private void writeResponse(HttpExchange exchange) throws IOException {
