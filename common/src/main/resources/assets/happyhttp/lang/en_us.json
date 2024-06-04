@@ -9,5 +9,8 @@
   "gui.happyhttp.timer_unit_ticks": "Ticks",
   "gui.happyhttp.timer_unit_seconds": "Seconds",
   "gui.happyhttp.http_receiver_settings_screen_current_timer_unit": "Timer Unit",
-  "gui.happyhttp.http_receiver_redirect_text": "Redirect Url:"
+  "gui.happyhttp.http_receiver_redirect_text": "Redirect Url:",
+  "gui.happyhttp.http_receiver_parameters_text": "Parameters:",
+  "gui.happyhttp.http_sender_endpoint": "Endpoint:",
+  "gui.happyhttp.http_sender_parameters": "Parameters:"
 }

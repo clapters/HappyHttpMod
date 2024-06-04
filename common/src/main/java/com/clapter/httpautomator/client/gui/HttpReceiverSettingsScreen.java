@@ -28,6 +28,7 @@ public class HttpReceiverSettingsScreen extends Screen {
     private static final Component TYPE_TEXT = Component.translatable("gui."+ Constants.MOD_ID + ".http_receiver_settings_screen_power_type");
     private static final Component START_TEXT = Component.translatable("gui."+ Constants.MOD_ID + ".http_receiver_startbutton");
     private static final Component REDIRECT_TEXT = Component.translatable("gui."+ Constants.MOD_ID + ".http_receiver_redirect_text");
+    private static final Component PARAMETERS_TEXT = Component.translatable("gui."+ Constants.MOD_ID + ".http_receiver_parameters_text");
 
     private final int screenWidth;
     private final int screenHeight;
@@ -103,10 +104,12 @@ public class HttpReceiverSettingsScreen extends Screen {
         this.endpoint.setResponder(text -> {
             endpointText = text;
         });
-        StringWidget endpointText = new StringWidget(leftPos+50, topPos + 206, ENDPOINT_TEXT, this.font);
+        MultiLineTextWidget endpointText = new MultiLineTextWidget(leftPos-70, topPos + 13, ENDPOINT_TEXT, this.font);
         addRenderableWidget(endpointText);
-        StringWidget typeText = new StringWidget(leftPos+50, topPos + 280, TYPE_TEXT, this.font);
+        MultiLineTextWidget typeText = new MultiLineTextWidget(leftPos-70, topPos + 47, TYPE_TEXT, this.font);
         addRenderableWidget(typeText);
+        MultiLineTextWidget parameterText = new MultiLineTextWidget(leftPos-70, topPos + 110, PARAMETERS_TEXT, this.font);
+        addRenderableWidget(parameterText);
 
         CycleButton<EnumPoweredType> enumButton = CycleButton.builder(EnumPoweredType::getComponent)
                 .withValues(EnumPoweredType.values())
@@ -121,7 +124,8 @@ public class HttpReceiverSettingsScreen extends Screen {
             redirectUrl = text;
         });
         addRenderableWidget(redirectBox);
-        StringWidget redirectText = new StringWidget(leftPos+50, topPos + 354, REDIRECT_TEXT, this.font);
+        //StringWidget redirectText = new StringWidget(leftPos+50, topPos + 354, REDIRECT_TEXT, this.font);
+        MultiLineTextWidget redirectText = new MultiLineTextWidget(leftPos-70, topPos + 79, REDIRECT_TEXT, this.font);
         addRenderableWidget(redirectText);
 
         if(this.poweredType == EnumPoweredType.TIMER){

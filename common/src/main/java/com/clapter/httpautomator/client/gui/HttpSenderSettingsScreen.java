@@ -10,6 +10,7 @@ import com.clapter.httpautomator.platform.Services;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.MultiLineTextWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -21,8 +22,10 @@ import java.util.Map;
 
 public class HttpSenderSettingsScreen extends Screen {
 
-    private static Component TITLE = Component.translatable("gui."+ Constants.MOD_ID + ".http_sender_settings_screen");
-    private static Component START_TEXT = Component.translatable("gui."+ Constants.MOD_ID + ".http_sender_startbutton");
+    private static final Component TITLE = Component.translatable("gui."+ Constants.MOD_ID + ".http_sender_settings_screen");
+    private static final Component START_TEXT = Component.translatable("gui."+ Constants.MOD_ID + ".http_sender_startbutton");
+    private static final Component URL_TEXT = Component.translatable("gui."+ Constants.MOD_ID + ".http_sender_endpoint");
+    private static final Component PARAMETERS_TEXT = Component.translatable("gui."+ Constants.MOD_ID + ".http_sender_parameters");
 
     private final int screenWidth;
     private final int screenHeight;
@@ -104,6 +107,11 @@ public class HttpSenderSettingsScreen extends Screen {
         if(!this.parameterFields.isEmpty()) {
             this.drawParameters();
         }
+
+        MultiLineTextWidget endpointText = new MultiLineTextWidget(leftPos-20, topPos + 13, URL_TEXT, this.font);
+        MultiLineTextWidget parametersText = new MultiLineTextWidget(leftPos-20, topPos + 36, PARAMETERS_TEXT, this.font);
+        addRenderableWidget(endpointText);
+        addRenderableWidget(parametersText);
     }
 
     private void drawParameters(){
