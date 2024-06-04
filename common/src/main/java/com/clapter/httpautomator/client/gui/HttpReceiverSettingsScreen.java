@@ -184,6 +184,16 @@ public class HttpReceiverSettingsScreen extends Screen {
         this.init();
     }
 
+    private void repositionEditBoxes() {
+        //System.out.println("REPO");
+        if(!this.parameterFields.isEmpty()){
+            for(int i = 0; i < this.parameterFields.size(); i+=2){
+                this.parameterFields.get(i).setX(this.leftPos+40);
+                this.parameterFields.get(i+1).setX(this.leftPos+130);
+            }
+
+        }
+    }
     private void drawParameters(){
 
         this.scrollablePanel = new ScrollableWidget(leftPos, topPos + 130, 100, 60, this.parameterFields);
@@ -255,7 +265,9 @@ public class HttpReceiverSettingsScreen extends Screen {
 
     @Override
     public void resize(Minecraft $$0, int $$1, int $$2) {
+        this.repositionEditBoxes();
         super.resize($$0, $$1, $$2);
 
     }
+
 }
