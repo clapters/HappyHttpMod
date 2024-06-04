@@ -14,8 +14,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.json.Json;
-import javax.json.JsonObjectBuilder;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -7,9 +7,7 @@ import com.clapter.httpautomator.utils.JsonUtils;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.*;
 
 public class HttpReceiverBlockHandler implements IHttpHandler {
@@ -89,13 +87,24 @@ public class HttpReceiverBlockHandler implements IHttpHandler {
         Map<String, String> parameters = new HashMap<>();
         // Get POST parameters
         if ("post".equalsIgnoreCase(exchange.getRequestMethod())) {
-            InputStream requestBody = exchange.getRequestBody();
+            InputStreamReader isr =  new InputStreamReader(exchange.getRequestBody(),"utf-8");
+            BufferedReader br = new BufferedReader(isr);
+            int b;
+            StringBuilder buf = new StringBuilder(512);
+            while ((b = br.read()) != -1) {
+                buf.append((char) b);
+            }
+            String requestBody = buf.toString();
+            br.close();
+            isr.close();
+            //InputStream requestBody = exchange.getRequestBody();
+            System.out.println(requestBody);
             parameters.putAll(parseQueryString(exchange.getRequestHeaders(), requestBody));
         }
         return parameters;
     }
 
-    private Map<String, String> parseQueryString(Headers requestHeaders, InputStream requestBody) {
+    private Map<String, String> parseQueryString(Headers requestHeaders, String requestBody) {
         //TODO: CHECK IF REQUEST BODY IS VALID JSON
         return JsonUtils.getParametersAsMap(requestBody);
     }

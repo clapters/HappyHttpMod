@@ -1,30 +1,39 @@
 package com.clapter.httpautomator.utils;
 
-import javax.json.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
+
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
 public class JsonUtils {
 
-    public static Map<String, String> getParametersAsMap(InputStream requestBody) {
+    public static Map<String, String> getParametersAsMap(String requestBody) {
         Map<String, String> parameters = new HashMap<>();
-        try (JsonReader jsonReader = Json.createReader(requestBody)) {
-            JsonObject jsonObject = jsonReader.readObject();
-            for (Map.Entry<String, JsonValue> entry : jsonObject.entrySet()) {
-                if(!entry.getValue().getValueType().equals(JsonValue.ValueType.STRING))continue; //TODO: Stringify
-                parameters.put(entry.getKey(), ((JsonString)entry.getValue()).getString());
-            }
+
+        JsonObject jsonObject = JsonParser.parseString(requestBody).getAsJsonObject();
+
+        for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
+            JsonElement value = entry.getValue();
+            if (!value.isJsonPrimitive() || !value.getAsJsonPrimitive().isString())
+                continue; // Only process string values
+            parameters.put(entry.getKey(), value.getAsString());
         }
         return parameters;
     }
 
     public static String parametersFromMapToString(Map<String, String> parameterMap){
-        JsonObjectBuilder builder = Json.createObjectBuilder();
+        JsonObject jsonObject = new JsonObject();
         for (Map.Entry<String, String> entry : parameterMap.entrySet()) {
-            builder.add(entry.getKey(), entry.getValue());
+            jsonObject.addProperty(entry.getKey(), entry.getValue());
         }
-        return builder.build().toString();
+        Gson gson = new Gson();
+        return gson.toJson(jsonObject);
     }
 
 }
