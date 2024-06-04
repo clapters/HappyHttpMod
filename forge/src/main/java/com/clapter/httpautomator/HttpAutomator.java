@@ -27,11 +27,11 @@ public class HttpAutomator {
 
     public HttpAutomator() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, HttpServerConfig.COMMON_CONFIG);
-        //CommonClass.init();
-        //MinecraftForge.EVENT_BUS.addListener(this::onServerStarting);
-        //MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
-        //MinecraftForge.EVENT_BUS.addListener(this::onServerStopping);
-        //FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onFMLCommonSetup);
+        CommonClass.init();
+        MinecraftForge.EVENT_BUS.addListener(this::onServerStarting);
+        MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
+        MinecraftForge.EVENT_BUS.addListener(this::onServerStopping);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onFMLCommonSetup);
     }
 
     private void onServerStarting(ServerStartingEvent e){
