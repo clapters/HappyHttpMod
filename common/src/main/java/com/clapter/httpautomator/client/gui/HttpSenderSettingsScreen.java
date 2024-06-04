@@ -7,6 +7,7 @@ import com.clapter.httpautomator.enums.EnumHttpMethod;
 import com.clapter.httpautomator.enums.EnumPoweredType;
 import com.clapter.httpautomator.network.packet.SUpdateHttpSenderValuesPacket;
 import com.clapter.httpautomator.platform.Services;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
@@ -64,8 +65,8 @@ public class HttpSenderSettingsScreen extends Screen {
         if(!parameterMap.isEmpty()){
             for(Map.Entry<String, String> entry : parameterMap.entrySet()){
                 //System.out.println(entry.getKey() + ": " + entry.getValue());
-                EditBox parBox = new EditBox(this.font, leftPos+90, topPos + 100, 50, 20, Component.literal("Parameter"));
-                EditBox valBox = new EditBox(this.font, leftPos +180, topPos + 100, 50, 20, Component.literal("Value"));
+                EditBox parBox = new EditBox(this.font, leftPos+40, topPos + 100, 50, 20, Component.literal("Parameter"));
+                EditBox valBox = new EditBox(this.font, leftPos +130, topPos + 100, 50, 20, Component.literal("Value"));
                 this.parameterFields.add(parBox);
                 this.parameterFields.add(valBox);
                 parBox.setValue(entry.getKey());
@@ -196,4 +197,23 @@ public class HttpSenderSettingsScreen extends Screen {
     public boolean isPauseScreen() {
         return false;
     }
+
+    private void repositionEditBoxes() {
+        //System.out.println("REPO");
+        if(!this.parameterFields.isEmpty()){
+            for(int i = 0; i < this.parameterFields.size(); i+=2){
+                this.parameterFields.get(i).setX(this.leftPos+40);
+                this.parameterFields.get(i+1).setX(this.leftPos+130);
+            }
+
+        }
+    }
+
+    @Override
+    public void resize(Minecraft $$0, int $$1, int $$2) {
+        this.repositionEditBoxes();
+        super.resize($$0, $$1, $$2);
+
+    }
+
 }
