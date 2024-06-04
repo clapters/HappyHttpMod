@@ -1,14 +1,15 @@
 package com.clapter.httpautomator.client.gui;
 
 import com.clapter.httpautomator.Constants;
-import com.clapter.httpautomator.blockentity.HttpReceiverBlockEntity;
 import com.clapter.httpautomator.blockentity.HttpSenderBlockEntity;
 import com.clapter.httpautomator.client.gui.widgets.ScrollableWidget;
-import com.clapter.httpautomator.network.packet.SUpdateHttpReceiverValuesPacket;
+import com.clapter.httpautomator.enums.EnumHttpMethod;
+import com.clapter.httpautomator.enums.EnumPoweredType;
 import com.clapter.httpautomator.network.packet.SUpdateHttpSenderValuesPacket;
 import com.clapter.httpautomator.platform.Services;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.MultiLineTextWidget;
 import net.minecraft.client.gui.screens.Screen;
@@ -33,6 +34,7 @@ public class HttpSenderSettingsScreen extends Screen {
     private int topPos;
     private HttpSenderBlockEntity blockEntity;
 
+    private EnumHttpMethod httpMethod;
     private boolean forceMapInit;
     private Button startButton;
     private EditBox endpoint;
@@ -53,6 +55,8 @@ public class HttpSenderSettingsScreen extends Screen {
         screenHeight = 166;
         this.blockEntity = blockEntity;
         forceMapInit = true;
+
+        this.httpMethod = this.blockEntity.getValues().httpMethod;
     }
 
     private void readParameterMap() {
@@ -78,44 +82,56 @@ public class HttpSenderSettingsScreen extends Screen {
         this.topPos = (this.height - screenHeight) / 2;
         this.startButton = addRenderableWidget(startButton.builder(
                         START_TEXT, this::handleStartButton)
-                .bounds(leftPos+74, topPos+200, 50, 20)
+                .bounds(leftPos+74, topPos+180, 50, 20)
                 .build()
         );
         if(this.forceMapInit) {
             this.readParameterMap();
             this.forceMapInit = false;
         }
-        this.endpoint = new EditBox(font, leftPos + 50, topPos + 6, 198, 20, Component.empty());
+        this.endpoint = new EditBox(font, leftPos, topPos + 6, 198, 20, Component.empty());
         this.endpoint.setResponder(text -> {
             endpointText = text;
         });
         endpoint.insertText(blockEntity.getValues().url);
         addRenderableWidget(endpoint);
 
-        countInput = new EditBox(this.font, leftPos + 50, topPos + 30, 100, 20, Component.literal("Count"));
+        countInput = new EditBox(this.font, leftPos, topPos + 30, 100, 20, Component.literal("Count"));
         this.countInput.setResponder(text -> {
             countInputAsString = text;
         });
         this.addRenderableWidget(countInput);
         this.saveCountButton = this.addRenderableWidget(saveCountButton.builder(
-                Component.literal("Set Count"),button -> {
+                Component.literal("Apply"),button -> {
                     if(countInputAsString.isEmpty())return;
                     numberOfFields = Integer.parseInt(countInput.getValue());
                     createInputFields(numberOfFields);
-                }).bounds(leftPos + 150, topPos + 30, 100, 20).build());
+                }).bounds(leftPos + 100, topPos + 30, 100, 20).build());
 
         if(!this.parameterFields.isEmpty()) {
             this.drawParameters();
         }
 
-        MultiLineTextWidget endpointText = new MultiLineTextWidget(leftPos-20, topPos + 13, URL_TEXT, this.font);
-        MultiLineTextWidget parametersText = new MultiLineTextWidget(leftPos-20, topPos + 36, PARAMETERS_TEXT, this.font);
+        MultiLineTextWidget endpointText = new MultiLineTextWidget(leftPos-60, topPos + 13, URL_TEXT, this.font);
+        MultiLineTextWidget parametersText = new MultiLineTextWidget(leftPos-60, topPos + 33, PARAMETERS_TEXT, this.font);
         addRenderableWidget(endpointText);
         addRenderableWidget(parametersText);
+
+        CycleButton<EnumHttpMethod> enumButton = CycleButton.builder(EnumHttpMethod::getComponent)
+                .withValues(EnumHttpMethod.values())
+                .withInitialValue(this.httpMethod)
+                .create(leftPos+200, topPos+6, 30, 20, Component.empty()
+                        , (but, value) -> { this.handleHttpMethodSwitch(value); });
+        addRenderableWidget(enumButton);
+
+    }
+
+    private void handleHttpMethodSwitch(EnumHttpMethod method){
+        this.httpMethod = method;
     }
 
     private void drawParameters(){
-        this.scrollablePanel = new ScrollableWidget(leftPos + 50, topPos + 60, 100, 100, this.parameterFields);
+        this.scrollablePanel = new ScrollableWidget(leftPos, topPos + 60, 100, 100, this.parameterFields);
         this.addRenderableWidget(scrollablePanel);
     }
 
@@ -123,8 +139,8 @@ public class HttpSenderSettingsScreen extends Screen {
         List<EditBox> containigBox = new ArrayList<>(this.parameterFields);
         this.parameterFields.clear();
         for(int i = 0; i < numberOfFields; i++){
-            EditBox parBox = new EditBox(this.font, leftPos+90, topPos + 100, 50, 20, Component.literal("Parameter"));
-            EditBox valBox = new EditBox(this.font, leftPos +180, topPos + 100, 50, 20, Component.literal("Value"));
+            EditBox parBox = new EditBox(this.font, leftPos+40, topPos + 100, 50, 20, Component.literal("Parameter"));
+            EditBox valBox = new EditBox(this.font, leftPos +130, topPos + 100, 50, 20, Component.literal("Value"));
             this.parameterFields.add(parBox);
             this.parameterFields.add(valBox);
             if(containigBox.size()/2 > i){
@@ -141,6 +157,7 @@ public class HttpSenderSettingsScreen extends Screen {
             //SEND UPDATE PACKET TO SERVER
             HttpSenderBlockEntity.Values values = blockEntity.getValues();
             values.url = this.endpointText;
+            values.httpMethod = this.httpMethod;
             if(this.scrollablePanel != null){
                 values.parameterMap = this.getParameterValues();
             }

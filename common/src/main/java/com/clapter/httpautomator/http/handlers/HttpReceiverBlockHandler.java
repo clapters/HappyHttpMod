@@ -8,6 +8,8 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URLDecoder;
 import java.util.*;
 
 public class HttpReceiverBlockHandler implements IHttpHandler {
@@ -97,9 +99,24 @@ public class HttpReceiverBlockHandler implements IHttpHandler {
             String requestBody = buf.toString();
             br.close();
             isr.close();
-            //InputStream requestBody = exchange.getRequestBody();
-            System.out.println(requestBody);
             parameters.putAll(parseQueryString(exchange.getRequestHeaders(), requestBody));
+        }
+        //get GET parameters
+        if("get".equalsIgnoreCase(exchange.getRequestMethod())){
+            URI requestURI = exchange.getRequestURI();
+            String query = requestURI.getQuery();
+            if (query != null) {
+                String[] pairs = query.split("&");
+                for (String pair : pairs) {
+                    String[] keyValue = pair.split("=");
+                    String key = URLDecoder.decode(keyValue[0], "UTF-8");
+                    String value = "";
+                    if (keyValue.length > 1) {
+                        value = URLDecoder.decode(keyValue[1], "UTF-8");
+                    }
+                    parameters.put(key, value);
+                }
+            }
         }
         return parameters;
     }

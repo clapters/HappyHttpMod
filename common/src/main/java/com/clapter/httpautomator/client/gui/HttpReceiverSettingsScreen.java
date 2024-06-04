@@ -2,7 +2,6 @@ package com.clapter.httpautomator.client.gui;
 
 import com.clapter.httpautomator.Constants;
 import com.clapter.httpautomator.blockentity.HttpReceiverBlockEntity;
-import com.clapter.httpautomator.client.gui.widgets.EditBoxPair;
 import com.clapter.httpautomator.client.gui.widgets.ScrollableWidget;
 import com.clapter.httpautomator.enums.EnumPoweredType;
 import com.clapter.httpautomator.enums.EnumTimerUnit;
@@ -13,11 +12,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -89,7 +86,7 @@ public class HttpReceiverSettingsScreen extends Screen {
     protected void init() {
         super.init();
         this.leftPos = (this.width - screenWidth) / 2;
-        this.topPos = (this.height - screenHeight) / 2 - 80;
+        this.topPos = (this.height - screenHeight) / 2 - 30;
         this.startButton = addRenderableWidget(startButton.builder(
                 START_TEXT, this::handleStartButton)
                 .bounds(leftPos+74, topPos+200, 50, 20)
@@ -152,7 +149,7 @@ public class HttpReceiverSettingsScreen extends Screen {
         });
         this.addRenderableWidget(parameterCountInput);
         this.saveParameterCountButton = this.addRenderableWidget(saveParameterCountButton.builder(
-                Component.literal("Set Count"),(button) -> {
+                Component.literal("Apply"),(button) -> {
                     if(numberOfFieldsAsString.isEmpty())return;
                     numberOfFields = Integer.parseInt(numberOfFieldsAsString);
                     createInputFields(numberOfFields);

@@ -1,8 +1,6 @@
 package com.clapter.httpautomator.platform.config;
 
-import com.clapter.httpautomator.platform.config.IHttpServerConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
-import org.apache.commons.lang3.tuple.Pair;
 
 public class HttpServerConfig implements IHttpServerConfig {
 

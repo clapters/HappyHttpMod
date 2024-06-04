@@ -1,8 +1,6 @@
 package com.clapter.httpautomator.block;
 
-import com.clapter.httpautomator.blockentity.HttpReceiverBlockEntity;
 import com.clapter.httpautomator.blockentity.HttpSenderBlockEntity;
-import com.clapter.httpautomator.network.packet.CHttpReceiverOpenGuiPacket;
 import com.clapter.httpautomator.network.packet.CHttpSenderOpenGuiPacket;
 import com.clapter.httpautomator.platform.Services;
 import com.clapter.httpautomator.registry.ModBlockEntities;
@@ -16,7 +14,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RedstoneTorchBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;

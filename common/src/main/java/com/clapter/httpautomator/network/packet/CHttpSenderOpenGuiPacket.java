@@ -1,8 +1,6 @@
 package com.clapter.httpautomator.network.packet;
 
-import com.clapter.httpautomator.blockentity.HttpReceiverBlockEntity;
 import com.clapter.httpautomator.blockentity.HttpSenderBlockEntity;
-import com.clapter.httpautomator.client.gui.HttpReceiverSettingsScreen;
 import com.clapter.httpautomator.client.gui.HttpSenderSettingsScreen;
 import com.clapter.httpautomator.network.IPacketContext;
 import net.minecraft.client.Minecraft;
