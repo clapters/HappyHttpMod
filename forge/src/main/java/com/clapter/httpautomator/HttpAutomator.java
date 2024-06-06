@@ -1,7 +1,11 @@
 package com.clapter.httpautomator;
 
 import com.clapter.httpautomator.platform.config.HttpServerConfig;
+import com.clapter.httpautomator.registry.ModBlocks;
+import com.clapter.httpautomator.registry.ModItems;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
@@ -20,6 +24,7 @@ public class HttpAutomator {
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarting);
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
         MinecraftForge.EVENT_BUS.addListener(this::onServerStopping);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCreativeTabsBuildContent);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onFMLCommonSetup);
     }
 
@@ -37,6 +42,13 @@ public class HttpAutomator {
 
     private void onFMLCommonSetup(FMLCommonSetupEvent e){
         e.enqueueWork(CommonClass::registerPackets);
+    }
+
+    private void onCreativeTabsBuildContent(BuildCreativeModeTabContentsEvent e){
+        if(e.getTabKey() == CreativeModeTabs.REDSTONE_BLOCKS){
+            e.accept(ModBlocks.httpReceiverBlock);
+            e.accept(ModBlocks.httpSenderBlock);
+        }
     }
 
 }

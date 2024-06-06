@@ -12,5 +12,7 @@
   "gui.httpautomator.http_receiver_redirect_text": "Redirect Url:",
   "gui.httpautomator.http_receiver_parameters_text": "Parameters:",
   "gui.httpautomator.http_sender_endpoint": "Endpoint:",
-  "gui.httpautomator.http_sender_parameters": "Request \nParameters:"
+  "gui.httpautomator.http_sender_parameters": "Request \nParameters:",
+  "block.httpautomator.sender": "Http Sender",
+  "block.httpautomator.receiver": "Http Receiver"
 }

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=true": {
+      "model": "httpautomator:block/receiver_powered"
+    },
+    "powered=false": {
+      "model": "httpautomator:block/receiver"
+    }
+  }
+}

@@ -8,6 +8,9 @@ import com.clapter.httpautomator.registry.ModBlockEntities;
 import com.clapter.httpautomator.registry.ModBlocks;
 import com.clapter.httpautomator.registry.ModItems;
 import com.clapter.httpautomator.registry.ModNetworkPackets;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 
 import java.io.IOException;
 
@@ -48,6 +51,5 @@ public class CommonClass {
     public static void onServerStopping(){
         HTTP_SERVER.stopServer();
     }
-
 
 }
