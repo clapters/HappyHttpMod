@@ -95,13 +95,12 @@ public class HttpReceiverBlockEntity extends BlockEntity {
         this.registerHandler();
     }
 
-    private void registerHandler(){
-        //if(!this.getLevel().isClientSide) {
-            if(currHandler != null){
-                currHandler.removeBlockFromHandler(this);
-            }
-            currHandler = HttpReceiverBlockHandler.create(this, this.values.url);
-        //}
+    private void registerHandler() {
+        if (currHandler != null) {
+            currHandler.removeBlockFromHandler(this);
+        }
+        currHandler = HttpReceiverBlockHandler.create(this, this.values.url);
+
     }
 
     private void postLoad(){
