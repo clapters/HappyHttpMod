@@ -24,20 +24,28 @@ public class HttpReceiverBlockHandler implements IHttpHandler {
         this.url = url;
     }
 
-    public static void create(HttpReceiverBlockEntity entity, String url){
+    public void removeBlockFromHandler(HttpReceiverBlockEntity block){
+        this.entityList.remove(block);
+        if(this.entityList.isEmpty()){
+            CommonClass.HTTP_SERVER.removeHandler(this);
+        }
+    }
+
+    public static HttpReceiverBlockHandler create(HttpReceiverBlockEntity entity, String url){
         String validatedUrl = validateUrl(url);
         IHttpHandler handler = CommonClass.HTTP_SERVER.getHandlerByUrl(validatedUrl);
         if(handler != null) {
             if (handler instanceof HttpReceiverBlockHandler receiverHandler) {
                 //ADD TO EXISTING HADNLER
                 receiverHandler.addBlockEntity(entity);
-                return;
+                return receiverHandler;
             }
             //ERROR BECAUSE URL ALREADY EXISTS AND IS NOT A RECEIVER HANDLER
-            return;
+            return null;
         }
         HttpReceiverBlockHandler newHandler = new HttpReceiverBlockHandler(entity, validatedUrl);
         CommonClass.HTTP_SERVER.registerHandler(newHandler);
+        return newHandler;
     }
 
     private static String validateUrl(String url){
@@ -122,7 +130,6 @@ public class HttpReceiverBlockHandler implements IHttpHandler {
     }
 
     private Map<String, String> parseQueryString(Headers requestHeaders, String requestBody) {
-        //TODO: CHECK IF REQUEST BODY IS VALID JSON
         return JsonUtils.getParametersAsMap(requestBody);
     }
 
@@ -152,7 +159,7 @@ public class HttpReceiverBlockHandler implements IHttpHandler {
     }
 
     //REDIRECTS CLIENT, IF ONE OF THE BLOCKS HAS A REDIRECTION SETTING
-    //BECAUSE OF MENY BLOCKS HAVING SAME ENDPOINT URL, IT TAKES THE LAST FOUND REDIRECT
+    //IN CASE OF MANY BLOCKS HAVING SAME ENDPOINT URL, IT TAKES THE LAST FOUND REDIRECT
     //URL
     private String getRedirect(HttpExchange exchange) throws IOException {
         String redirectUrl = null;

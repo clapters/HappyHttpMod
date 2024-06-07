@@ -1,7 +1,9 @@
 package com.clapter.httpautomator.http;
 
+import com.clapter.httpautomator.Constants;
 import com.clapter.httpautomator.http.api.IHttpHandler;
 import com.clapter.httpautomator.http.api.IHttpServer;
+import com.clapter.httpautomator.platform.Services;
 import com.clapter.httpautomator.utils.ImplLoader;
 import com.sun.net.httpserver.HttpServer;
 
@@ -21,15 +23,17 @@ public class HttpServerImpl implements IHttpServer {
 
     public HttpServerImpl(){
         handlerMap = new HashMap<String, IHttpHandler>();
-        //urlToHandlerMap = new HashMap<String, IHttpHandler>();
         handlerToRegisterQueue = new HashMap<String, IHttpHandler>();
     }
 
     public boolean startServer() throws IOException {
-        server = HttpServer.create(new InetSocketAddress(8080), 0);
+        InetSocketAddress sockAdress = new InetSocketAddress(Services.HTTP_CONFIG.getPort());
+        Constants.LOG.info("HTTP SERVER STARTING AT IP:"+sockAdress.getHostName()+" PORT:"+sockAdress.getPort());
+        server = HttpServer.create(sockAdress, 0);
         server.setExecutor(null); // creates a default executor
         server.start();
         this.handleHandlersInQueue();
+        Constants.LOG.info("HTTP SERVER STARTED");
         return true;
     }
 
@@ -59,13 +63,22 @@ public class HttpServerImpl implements IHttpServer {
         return null;
     }
 
+    @Override
+    public void removeHandler(IHttpHandler handler) {
+        try {
+            server.removeContext(handler.getUrl());
+        }catch (Exception ignored) {
+
+        }
+    }
+
     private void handleRegisteringHandlers(IHttpHandler handler) {
         if(!handlerMap.containsKey(handler.getUrl())) {
             registerAndPutInMap(handler);
         }else{
             //ALREADY CONTAINING A HANDLER FOR THAT ID (FOR THAT BLOCK IN OUR TEST)
             //FOR NOW JUST OVERRIDE WITH NEW ONE
-            server.removeContext(handler.getUrl());
+            //server.removeContext(handler.getUrl());
             registerAndPutInMap(handler);
 
         }

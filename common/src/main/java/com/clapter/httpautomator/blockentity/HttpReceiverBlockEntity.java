@@ -24,6 +24,8 @@ public class HttpReceiverBlockEntity extends BlockEntity {
     private final Values values;
     private boolean isPowerOn;
 
+    private HttpReceiverBlockHandler currHandler;
+
     public HttpReceiverBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.httpReceiverBlockEntity.get().get(), pos, state);
         this.values = new Values();
@@ -90,13 +92,20 @@ public class HttpReceiverBlockEntity extends BlockEntity {
             this.setBlockPowered(false);
         }
         setChanged();
-        if(!this.getLevel().isClientSide) {
-            HttpReceiverBlockHandler.create(this, this.values.url);
-        }
+        this.registerHandler();
+    }
+
+    private void registerHandler(){
+        //if(!this.getLevel().isClientSide) {
+            if(currHandler != null){
+                currHandler.removeBlockFromHandler(this);
+            }
+            currHandler = HttpReceiverBlockHandler.create(this, this.values.url);
+        //}
     }
 
     private void postLoad(){
-        HttpReceiverBlockHandler.create(this, this.values.url);
+        this.registerHandler();
     }
 
     public Values getValues(){
