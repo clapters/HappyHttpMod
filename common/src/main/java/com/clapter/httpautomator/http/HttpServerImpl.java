@@ -72,6 +72,12 @@ public class HttpServerImpl implements IHttpServer {
         }
     }
 
+    @Override
+    public String getServerAddress() {
+        if(this.server == null)return "";
+        return this.server.getAddress().getHostName()+":"+this.server.getAddress().getPort();
+    }
+
     private void handleRegisteringHandlers(IHttpHandler handler) {
         if(!handlerMap.containsKey(handler.getUrl())) {
             registerAndPutInMap(handler);

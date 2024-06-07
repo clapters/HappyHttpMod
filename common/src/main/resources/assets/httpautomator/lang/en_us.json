@@ -1,6 +1,6 @@
 {
   "gui.httpautomator.http_receiver_settings_screen": "Receiver Settings",
-  "gui.httpautomator.http_receiver_settings_screen_endpoint_text": "Endpoint: /",
+  "gui.httpautomator.http_receiver_settings_screen_endpoint_text": "Endpoint:",
   "gui.httpautomator.http_receiver_settings_screen_power_type": "Power Type:",
   "gui.httpautomator.http_receiver_startbutton": "Start/Save",
   "gui.httpautomator.http_receiver_settings_screen_current_type": "Current",

@@ -24,22 +24,25 @@ public class PacketHandler implements IPacketHandler {
             .networkProtocolVersion(1)
             .simpleChannel();
 
-    //THE HANDLER METHOD FOR HANDLING PACKETS AFTER THEIR DECODING PROCESS
-    //HAS TO START HERE, SINCE THE CONTEXT OBJECT IS A FORGE CLASS
-    private static void handle(BasePacket packet, CustomPayloadEvent.Context context) {
-        context.enqueueWork(() -> packet.handle(new PacketContext(context)));
-        context.setPacketHandled(true);
-    }
 
     @Override
     public <T extends BasePacket> void registerPacket(Class<T> packetClass, BiConsumer<T, FriendlyByteBuf> encode,
                                                       Function<FriendlyByteBuf, T> decode, PacketDirection direction) {
         NetworkDirection dir = this.getNetworkDirectionFromPacketDirection(direction);
-        INSTANCE.messageBuilder(packetClass, dir)
-                .encoder(encode)
-                .decoder(decode)
-                .consumerMainThread(PacketHandler::handle)
-                .add();
+        if(dir.equals(NetworkDirection.PLAY_TO_SERVER)) {
+            INSTANCE.messageBuilder(packetClass, dir)
+                    .encoder(encode)
+                    .decoder(decode)
+                    .consumerMainThread(PacketClientHandler::handle)
+                    .add();
+        }
+        if(dir.equals(NetworkDirection.PLAY_TO_CLIENT)){
+            INSTANCE.messageBuilder(packetClass, dir)
+                    .encoder(encode)
+                    .decoder(decode)
+                    .consumerMainThread(PacketServerHandler::handle)
+                    .add();
+        }
     }
 
     @Override

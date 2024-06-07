@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -95,6 +96,10 @@ public class BaseBlockScreen extends Screen {
         }
         this.clearWidgets();
         this.init();
+    }
+
+    public void assignEntity(BlockEntity entity){
+
     }
 
 }

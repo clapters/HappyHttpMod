@@ -1,13 +1,17 @@
 package com.clapter.httpautomator.network.packet;
 
+import com.clapter.httpautomator.CommonClass;
 import com.clapter.httpautomator.blockentity.HttpReceiverBlockEntity;
 import com.clapter.httpautomator.client.gui.HttpReceiverSettingsScreen;
 import com.clapter.httpautomator.network.IPacketContext;
+import com.clapter.httpautomator.utils.GuiOpener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class CHttpReceiverOpenGuiPacket extends BasePacket{
 
@@ -21,12 +25,15 @@ public class CHttpReceiverOpenGuiPacket extends BasePacket{
 
     public CHttpReceiverOpenGuiPacket(FriendlyByteBuf buf){
         this(buf.readBlockPos(), HttpReceiverBlockEntity.Values.readBuffer(buf));
+
     }
 
     public void encode(FriendlyByteBuf buf){
         buf.writeBlockPos(this.entityPos);
         this.values.writeValues(buf);
+
     }
+
 
 
     @Override
@@ -36,8 +43,7 @@ public class CHttpReceiverOpenGuiPacket extends BasePacket{
             BlockEntity entity = level.getBlockEntity(this.entityPos);
             if(entity instanceof HttpReceiverBlockEntity receiver){
                 receiver.updateValues(this.values);
-                //TODO: Separate screen opening from this packet
-                Minecraft.getInstance().setScreen(new HttpReceiverSettingsScreen(receiver));
+                GuiOpener.openGui("receiver", receiver);
             }
         }
     }

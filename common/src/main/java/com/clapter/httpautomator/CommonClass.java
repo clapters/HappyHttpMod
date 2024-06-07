@@ -29,6 +29,7 @@ public class CommonClass {
         ModNetworkPackets.registerPackets();
     }
 
+
     //On Server Starting Callback. Is used for starting the HTTP-Server
     public static void onServerStarting(){
         try {

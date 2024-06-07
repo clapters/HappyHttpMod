@@ -13,6 +13,7 @@ import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -27,7 +28,7 @@ public class HttpReceiverSettingsScreen extends BaseBlockScreen {
     private static final Component REDIRECT_TEXT = Component.translatable("gui."+ Constants.MOD_ID + ".http_receiver_redirect_text");
     private static final Component PARAMETERS_TEXT = Component.translatable("gui."+ Constants.MOD_ID + ".http_receiver_parameters_text");
 
-    private final HttpReceiverBlockEntity blockEntity;
+    private HttpReceiverBlockEntity blockEntity;
 
     private boolean forceMapInit;
     private Button startButton;
@@ -45,18 +46,24 @@ public class HttpReceiverSettingsScreen extends BaseBlockScreen {
     private EnumTimerUnit timerUnit = EnumTimerUnit.TICKS;
     private int numberOfFields = 0;
     private String numberOfFieldsAsString = "";
+    private String adress;
 
-
-    public HttpReceiverSettingsScreen(HttpReceiverBlockEntity blockEntity) {
+    public HttpReceiverSettingsScreen(HttpReceiverBlockEntity blockEntity, String adress) {
         super(TITLE);
-        this.blockEntity = blockEntity;
+
+    }
+
+    @Override
+    public void assignEntity(BlockEntity entity) {
+        super.assignEntity(entity);
+        this.blockEntity = (HttpReceiverBlockEntity)entity;
         this.endpointText = this.blockEntity.getValues().url;
         this.poweredType = this.blockEntity.getValues().poweredType;
         this.timerText = Float.toString(this.blockEntity.getValues().timer);
         this.timerUnit = this.blockEntity.getValues().timerUnit;
         this.redirectUrl = this.blockEntity.getValues().redirectClientUrl;
         this.forceMapInit = true;
-
+        this.adress = adress;
     }
 
     @Override
@@ -78,7 +85,8 @@ public class HttpReceiverSettingsScreen extends BaseBlockScreen {
         this.endpoint.setResponder(text -> {
             endpointText = text;
         });
-        MultiLineTextWidget endpointText = new MultiLineTextWidget(leftPos-70, topPos + 13, ENDPOINT_TEXT, this.font);
+        MultiLineTextWidget endpointText = new MultiLineTextWidget(leftPos-50, topPos+7, ENDPOINT_TEXT, this.font);
+        //MultiLineTextWidget adressText = new MultiLineTextWidget(leftPos-100, topPos+ 15, Component.literal(this.adress+"/"), this.font);
         MultiLineTextWidget typeText = new MultiLineTextWidget(leftPos-70, topPos + 47, TYPE_TEXT, this.font);
         MultiLineTextWidget parameterText = new MultiLineTextWidget(leftPos-70, topPos + 110, PARAMETERS_TEXT, this.font);
         MultiLineTextWidget redirectText = new MultiLineTextWidget(leftPos-70, topPos + 79, REDIRECT_TEXT, this.font);
@@ -96,6 +104,7 @@ public class HttpReceiverSettingsScreen extends BaseBlockScreen {
             numberOfFieldsAsString = text;
         });
         this.addRenderableWidget(endpointText);
+        //this.addRenderableWidget(adressText);
         this.addRenderableWidget(typeText);
         this.addRenderableWidget(parameterText);
         this.addRenderableWidget(enumButton);

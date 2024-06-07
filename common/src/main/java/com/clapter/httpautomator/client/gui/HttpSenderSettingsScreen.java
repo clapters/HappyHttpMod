@@ -15,6 +15,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.MultiLineTextWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class HttpSenderSettingsScreen extends BaseBlockScreen {
     private static final Component URL_TEXT = Component.translatable("gui."+ Constants.MOD_ID + ".http_sender_endpoint");
     private static final Component PARAMETERS_TEXT = Component.translatable("gui."+ Constants.MOD_ID + ".http_sender_parameters");
 
-    private final HttpSenderBlockEntity blockEntity;
+    private HttpSenderBlockEntity blockEntity;
 
     private EnumHttpMethod httpMethod;
     private boolean forceMapInit;
@@ -44,7 +45,12 @@ public class HttpSenderSettingsScreen extends BaseBlockScreen {
 
     public HttpSenderSettingsScreen(HttpSenderBlockEntity blockEntity) {
         super(TITLE);
-        this.blockEntity = blockEntity;
+
+    }
+
+    @Override
+    public void assignEntity(BlockEntity entity) {
+        this.blockEntity = (HttpSenderBlockEntity)entity;
         forceMapInit = true;
         this.httpMethod = this.blockEntity.getValues().httpMethod;
     }
