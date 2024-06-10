@@ -91,6 +91,8 @@ public class HttpReceiverSettingsScreen extends BaseBlockScreen {
                 Component.literal("External:"+this.blockEntity.getValues().publicAdress+"/"), this.font);
         MultiLineTextWidget adressTextPrivate = new MultiLineTextWidget(leftPos-130, topPos+ 15,
                 Component.literal("Internal:"+this.blockEntity.getValues().privateAdress+"/"), this.font);
+        adressTextPublic.setPosition(leftPos-adressTextPublic.getWidth(), topPos+5);
+        adressTextPrivate.setPosition(leftPos-adressTextPrivate.getWidth(), topPos+15);
 
         MultiLineTextWidget typeText = new MultiLineTextWidget(leftPos-70, topPos + 47, TYPE_TEXT, this.font);
         MultiLineTextWidget parameterText = new MultiLineTextWidget(leftPos-70, topPos + 110, PARAMETERS_TEXT, this.font);
