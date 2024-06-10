@@ -49,15 +49,18 @@ public class HttpServerImpl implements IHttpServer {
         Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
         while (networkInterfaces.hasMoreElements()) {
             NetworkInterface networkInterface = networkInterfaces.nextElement();
-            Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
-            while (inetAddresses.hasMoreElements()) {
-                InetAddress inetAddress = inetAddresses.nextElement();
-                if (!inetAddress.isLoopbackAddress() && inetAddress instanceof java.net.Inet4Address) {
-                    return inetAddress.getHostAddress();
+            if (networkInterface.isUp() && !networkInterface.isLoopback()) {
+                Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
+                while (inetAddresses.hasMoreElements()) {
+                    InetAddress inetAddress = inetAddresses.nextElement();
+                    if (inetAddress instanceof java.net.Inet4Address) {
+
+                        return inetAddress.getHostAddress();
+                    }
                 }
             }
         }
-        return null; // If no IPv4 address is found
+        return "";
     }
 
     private static String getExternalIPAddress() {
