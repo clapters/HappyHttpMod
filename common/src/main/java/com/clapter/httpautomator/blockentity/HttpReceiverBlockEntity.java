@@ -173,7 +173,7 @@ public class HttpReceiverBlockEntity extends BlockEntity {
             values.parameterMap = buf.readMap(FriendlyByteBuf::readUtf, FriendlyByteBuf::readUtf);
             values.privateAdress = buf.readUtf();
             values.publicAdress = buf.readUtf();
-            System.out.println(values.privateAdress);
+
             return values;
         }
 

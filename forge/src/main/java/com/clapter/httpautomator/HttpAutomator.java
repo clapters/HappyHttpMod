@@ -3,6 +3,7 @@ package com.clapter.httpautomator;
 import com.clapter.httpautomator.platform.config.HttpServerConfig;
 import com.clapter.httpautomator.registry.ModBlocks;
 import com.clapter.httpautomator.registry.ModItems;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -42,6 +43,7 @@ public class HttpAutomator {
 
     private void onFMLCommonSetup(FMLCommonSetupEvent e){
         e.enqueueWork(CommonClass::registerPackets);
+
     }
 
     private void onCreativeTabsBuildContent(BuildCreativeModeTabContentsEvent e){

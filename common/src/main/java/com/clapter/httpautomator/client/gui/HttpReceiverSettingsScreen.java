@@ -7,6 +7,8 @@ import com.clapter.httpautomator.enums.EnumPoweredType;
 import com.clapter.httpautomator.enums.EnumTimerUnit;
 import com.clapter.httpautomator.network.packet.SUpdateHttpReceiverValuesPacket;
 import com.clapter.httpautomator.platform.Services;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.*;
@@ -15,6 +17,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.opengl.GL12;
 
 import java.util.*;
 import java.util.List;
@@ -70,11 +73,12 @@ public class HttpReceiverSettingsScreen extends BaseBlockScreen {
     protected void init() {
         super.init();
         this.topPos = (this.height - screenHeight) / 2 - 30;
+        this.leftPos = (this.width - screenWidth) / 2 + 50;
         this.parameterFieldsPosX = this.leftPos+40;
         this.parameterFieldsPosXOffset = this.leftPos+130;
         this.startButton = addRenderableWidget(startButton.builder(
                 START_TEXT, this::handleStartButton)
-                .bounds(leftPos+74, topPos+200, 50, 20)
+                .bounds(leftPos+27, topPos+200, 50, 20)
                 .build()
         );
         if(this.forceMapInit) {
