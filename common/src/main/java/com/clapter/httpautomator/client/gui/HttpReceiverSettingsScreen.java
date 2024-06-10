@@ -82,11 +82,16 @@ public class HttpReceiverSettingsScreen extends BaseBlockScreen {
             this.forceMapInit = false;
         }
         this.endpoint = new EditBox(font, leftPos, topPos + 6, 198, 20, Component.empty());
+        this.endpoint.setMaxLength(1028);
         this.endpoint.setResponder(text -> {
             endpointText = text;
         });
-        MultiLineTextWidget endpointText = new MultiLineTextWidget(leftPos-50, topPos+7, ENDPOINT_TEXT, this.font);
-        //MultiLineTextWidget adressText = new MultiLineTextWidget(leftPos-100, topPos+ 15, Component.literal(this.adress+"/"), this.font);
+        MultiLineTextWidget endpointText = new MultiLineTextWidget(leftPos-50, topPos-5, ENDPOINT_TEXT, this.font);
+        MultiLineTextWidget adressTextPublic = new MultiLineTextWidget(leftPos-140, topPos+5,
+                Component.literal("External:"+this.blockEntity.getValues().publicAdress+"/"), this.font);
+        MultiLineTextWidget adressTextPrivate = new MultiLineTextWidget(leftPos-130, topPos+ 15,
+                Component.literal("Internal:"+this.blockEntity.getValues().privateAdress+"/"), this.font);
+
         MultiLineTextWidget typeText = new MultiLineTextWidget(leftPos-70, topPos + 47, TYPE_TEXT, this.font);
         MultiLineTextWidget parameterText = new MultiLineTextWidget(leftPos-70, topPos + 110, PARAMETERS_TEXT, this.font);
         MultiLineTextWidget redirectText = new MultiLineTextWidget(leftPos-70, topPos + 79, REDIRECT_TEXT, this.font);
@@ -96,15 +101,18 @@ public class HttpReceiverSettingsScreen extends BaseBlockScreen {
                 .create(leftPos, topPos + 40, 100, 20, Component.translatable("gui."+ Constants.MOD_ID + ".http_receiver_settings_screen_current_type")
                         , (but, value) -> { this.handlePoweredTypeSwitch(value); });
         this.redirectBox = new EditBox(font, leftPos, topPos + 74, 198, 20, Component.empty());
+        this.redirectBox.setMaxLength(1028);
         this.redirectBox.setResponder(text -> {
             redirectUrl = text;
         });
+
         this.parameterCountInput = new EditBox(this.font, leftPos, topPos + 100, 80, 20, Component.literal("Count"));
         this.parameterCountInput.setResponder(text -> {
             numberOfFieldsAsString = text;
         });
         this.addRenderableWidget(endpointText);
-        //this.addRenderableWidget(adressText);
+        this.addRenderableWidget(adressTextPublic);
+        this.addRenderableWidget(adressTextPrivate);
         this.addRenderableWidget(typeText);
         this.addRenderableWidget(parameterText);
         this.addRenderableWidget(enumButton);

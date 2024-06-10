@@ -1,5 +1,6 @@
 package com.clapter.httpautomator.blockentity;
 
+import com.clapter.httpautomator.CommonClass;
 import com.clapter.httpautomator.Constants;
 import com.clapter.httpautomator.block.HttpReceiverBlock;
 import com.clapter.httpautomator.enums.EnumPoweredType;
@@ -148,6 +149,8 @@ public class HttpReceiverBlockEntity extends BlockEntity {
         public EnumTimerUnit timerUnit = EnumTimerUnit.TICKS;
         public String redirectClientUrl = "";
         public Map<String, String> parameterMap = new HashMap<String, String>();
+        public String privateAdress;
+        public String publicAdress;
 
         public void writeValues(FriendlyByteBuf buf){
             buf.writeUtf(this.url);
@@ -156,6 +159,8 @@ public class HttpReceiverBlockEntity extends BlockEntity {
             buf.writeEnum(this.timerUnit);
             buf.writeUtf(this.redirectClientUrl);
             buf.writeMap(this.parameterMap, FriendlyByteBuf::writeUtf, FriendlyByteBuf::writeUtf);
+            buf.writeUtf(CommonClass.HTTP_SERVER.getServerAddress());
+            buf.writeUtf(CommonClass.HTTP_SERVER.getServerPublicAdress());
         }
 
         public static Values readBuffer(FriendlyByteBuf buf){
@@ -166,6 +171,9 @@ public class HttpReceiverBlockEntity extends BlockEntity {
             values.timerUnit = buf.readEnum(EnumTimerUnit.class);
             values.redirectClientUrl = buf.readUtf();
             values.parameterMap = buf.readMap(FriendlyByteBuf::readUtf, FriendlyByteBuf::readUtf);
+            values.privateAdress = buf.readUtf();
+            values.publicAdress = buf.readUtf();
+            System.out.println(values.privateAdress);
             return values;
         }
 
@@ -176,6 +184,8 @@ public class HttpReceiverBlockEntity extends BlockEntity {
             this.timerUnit = values.timerUnit;
             this.poweredType = values.poweredType;
             this.parameterMap = values.parameterMap;
+            this.privateAdress = values.privateAdress;
+            this.publicAdress = values.publicAdress;
         }
 
     }

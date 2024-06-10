@@ -70,6 +70,7 @@ public class HttpSenderSettingsScreen extends BaseBlockScreen {
             this.forceMapInit = false;
         }
         EditBox endpoint = new EditBox(font, leftPos, topPos + 6, 198, 20, Component.empty());
+        endpoint.setMaxLength(1028);
         endpoint.setResponder(text -> {
             endpointText = text;
         });

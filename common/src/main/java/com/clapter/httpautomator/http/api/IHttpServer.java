@@ -13,4 +13,5 @@ public interface IHttpServer {
     IHttpHandler getHandlerByUrl(String url);
     void removeHandler(IHttpHandler handler);
     String getServerAddress();
+    String getServerPublicAdress();
 }

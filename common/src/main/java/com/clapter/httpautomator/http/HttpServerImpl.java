@@ -7,14 +7,17 @@ import com.clapter.httpautomator.platform.Services;
 import com.clapter.httpautomator.utils.ImplLoader;
 import com.sun.net.httpserver.HttpServer;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.InetSocketAddress;
+import java.io.InputStreamReader;
+import java.net.*;
 import java.util.*;
 
 public class HttpServerImpl implements IHttpServer {
 
     private HttpServer server;
-
+    private String localAdress;
+    private String externalAdress;
     //private Map<Integer, IHttpHandler> handlerMap;
     private Map<String, IHttpHandler> handlerMap;
     //USING MAP INSTEAD OF QUEUE FOR FAST RETRIEVAL OF A HANDLER FROM THE QUEUE BY ITS KEY
@@ -28,13 +31,52 @@ public class HttpServerImpl implements IHttpServer {
 
     public boolean startServer() throws IOException {
         InetSocketAddress sockAdress = new InetSocketAddress(Services.HTTP_CONFIG.getPort());
-        Constants.LOG.info("HTTP SERVER STARTING AT IP:"+sockAdress.getHostName()+" PORT:"+sockAdress.getPort());
         server = HttpServer.create(sockAdress, 0);
         server.setExecutor(null); // creates a default executor
         server.start();
         this.handleHandlersInQueue();
         Constants.LOG.info("HTTP SERVER STARTED");
+        try {
+            this.localAdress = getInternalIPv4Address();
+            this.externalAdress = getExternalIPAddress();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return true;
+    }
+
+    private static String getInternalIPv4Address() throws Exception {
+        Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+        while (networkInterfaces.hasMoreElements()) {
+            NetworkInterface networkInterface = networkInterfaces.nextElement();
+            Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
+            while (inetAddresses.hasMoreElements()) {
+                InetAddress inetAddress = inetAddresses.nextElement();
+                if (!inetAddress.isLoopbackAddress() && inetAddress instanceof java.net.Inet4Address) {
+                    return inetAddress.getHostAddress();
+                }
+            }
+        }
+        return null; // If no IPv4 address is found
+    }
+
+    private static String getExternalIPAddress() {
+        String externalIP = "";
+        String serviceURL = "http://checkip.amazonaws.com"; // This service returns the public IP address of the requester
+
+        try {
+            URL url = new URL(serviceURL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                externalIP = in.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return externalIP;
     }
 
     private void handleHandlersInQueue() {
@@ -75,7 +117,13 @@ public class HttpServerImpl implements IHttpServer {
     @Override
     public String getServerAddress() {
         if(this.server == null)return "";
-        return this.server.getAddress().getHostName()+":"+this.server.getAddress().getPort();
+        return this.localAdress+":"+this.server.getAddress().getPort();
+    }
+
+    @Override
+    public String getServerPublicAdress() {
+        if(this.server == null)return "";
+        return this.externalAdress+":"+this.server.getAddress().getPort();
     }
 
     private void handleRegisteringHandlers(IHttpHandler handler) {
