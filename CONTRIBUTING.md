@@ -18,13 +18,13 @@ Thank you for considering contributing to [Your Mod Name]! Here are some guideli
 
 ## Code of Conduct
 
-This project and everyone participating in it is governed by the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [email@example.com].
+This project and everyone participating in it is governed by the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior.
 
 ## How to Contribute
 
 ### Reporting Bugs
 
-If you find a bug in the project, please report it by creating an issue in the [GitHub Issues](https://github.com/your-repo/issues) section.
+If you find a bug in the project, please report it by creating an issue in the [GitHub Issues](https://github.com/clapters/HappyHttpMod/issues) section.
 
 **When reporting a bug, please include:**
 - A clear and descriptive title.
@@ -49,7 +49,7 @@ We welcome suggestions for new features! To suggest a feature, please open an is
 
 2. **Clone the Forked Repository**: Clone the repository to your local machine.
    ```sh
-   git clone https://github.com/your-username/your-repo.git
+   git clone [https://github.com/clapters/HappyHttpMod].git
    cd your-repo
    git checkout -b feature/your-feature-name
 ```
@@ -79,7 +79,7 @@ Setting Up the Development Environment
 Clone the Repository: Clone the repository to your local machine.
 
 ```sh
-git clone https://github.com/your-username/your-repo.git
+git clone [https://github.com/your-username/your-repo](https://github.com/clapters/HappyHttpMod).git
 cd your-repo
 ```
 
