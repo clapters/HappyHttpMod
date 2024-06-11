@@ -59,20 +59,20 @@ We welcome suggestions for new features! To suggest a feature, please open an is
     git checkout -b feature/your-feature-name
    ```
 
-4. Make Your Changes: Implement your changes, following the coding standards and guidelines.
+4. **Make Your Changes**: Implement your changes, following the coding standards and guidelines.
 
-5. Commit Your Changes: Commit your changes with a clear and descriptive commit message.
+5. **Commit Your Changes**: Commit your changes with a clear and descriptive commit message.
    ```sh
     git add .
     git commit -m "Add feature: your-feature-name"
    ```
 
-6. Push Your Changes: Push your changes to your forked repository.
+6. **Push Your Changes**: Push your changes to your forked repository.
    ```sh
     git push origin feature/your-feature-name
    ```
 
-7. Create a Pull Request: Go to the original repository and click on the "New Pull Request" button. Select your branch and provide a clear description of your changes.
+7. **Create a Pull Request**: Go to the original repository and click on the "New Pull Request" button. Select your branch and provide a clear description of your changes.
 
 Development Guidelines
 Setting Up the Development Environment
@@ -100,17 +100,18 @@ Run Tests: Ensure all tests pass.
 **Coding Standards**
 Follow the Coding Standards to ensure code consistency and quality. Key points include:
 
-Use 4 spaces for indentation.
-Use descriptive naming conventions.
-Document code with Javadoc.
-Pull Request Process
-Ensure your pull request adheres to the following guidelines:
+# Use 4 spaces for indentation.
+# Use descriptive naming conventions.
+# Document code with Javadoc.
+# Pull Request Process
+# Ensure your pull request adheres to the following guidelines:
 
 It includes a clear description of the changes and the problem it solves.
 It adheres to the coding standards.
 It includes tests for the new functionality or bug fix.
 It does not include unnecessary commits or changes.
-Submit your pull request:
+
+**Submit your pull request**:
 
 Title: Use a clear and descriptive title.
 Description: Provide a detailed description of your changes, including links to related issues.
@@ -129,7 +130,6 @@ Purpose: Report a bug or unexpected behavior in the mod.
 Content:
 
 ```markdown
-Kopier kode
 ---
 name: Bug Report
 about: Report a bug or unexpected behavior in the mod
