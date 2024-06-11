@@ -45,7 +45,8 @@
  */
 public int calculateHealth(PlayerEntity player) {
     // Method implementation
-}```
+}
+```
 
 ### Exception Handling
 Avoid using exceptions for control flow.
@@ -57,7 +58,8 @@ try {
     // Code that might throw an exception
 } catch (SpecificException e) {
     logger.error("A specific error occurred: ", e);
-}```
+}
+```
 
 ### Avoid Magic Numbers
 Replace magic numbers with named constants.
@@ -113,7 +115,8 @@ public class MyModPacketHandler {
         PROTOCOL_VERSION::equals,
         PROTOCOL_VERSION::equals
     );
-}```
+}
+```
 
 ## Version Control Best Practices
 
