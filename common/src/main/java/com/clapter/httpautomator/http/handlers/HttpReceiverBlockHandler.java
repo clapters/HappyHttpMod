@@ -26,8 +26,11 @@ public class HttpReceiverBlockHandler implements IHttpHandler {
     }
 
     public void removeBlockFromHandler(HttpReceiverBlockEntity block){
+        //System.out.println("REMOVING BLOCK FROM "+this);
+        //System.out.println(this.entityList);
         this.entityList.remove(block);
         if(this.entityList.isEmpty()){
+            //System.out.println("REMOVING HANDLER "+this);
             CommonClass.HTTP_SERVER.removeHandler(this);
         }
     }
@@ -35,6 +38,7 @@ public class HttpReceiverBlockHandler implements IHttpHandler {
     public static HttpReceiverBlockHandler create(HttpReceiverBlockEntity entity, String url){
         String validatedUrl = validateUrl(url);
         IHttpHandler handler = CommonClass.HTTP_SERVER.getHandlerByUrl(validatedUrl);
+        //System.out.println("FOUND HANDLER: "+handler);
         if(handler != null) {
             if (handler instanceof HttpReceiverBlockHandler receiverHandler) {
                 //ADD TO EXISTING HADNLER
@@ -134,4 +138,8 @@ public class HttpReceiverBlockHandler implements IHttpHandler {
         return redirectUrl;
     }
 
+    @Override
+    public String toString() {
+        return "Handler: "+this.url;
+    }
 }

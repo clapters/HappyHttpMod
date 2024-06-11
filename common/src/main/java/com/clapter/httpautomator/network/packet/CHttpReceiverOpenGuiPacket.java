@@ -42,7 +42,7 @@ public class CHttpReceiverOpenGuiPacket extends BasePacket{
             ClientLevel level = Minecraft.getInstance().level;
             BlockEntity entity = level.getBlockEntity(this.entityPos);
             if(entity instanceof HttpReceiverBlockEntity receiver){
-                receiver.updateValues(this.values);
+                receiver.updateValuesClient(this.values);
                 GuiOpener.openGui("receiver", receiver);
             }
         }

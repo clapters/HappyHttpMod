@@ -96,6 +96,10 @@ public class HttpReceiverBlockEntity extends BlockEntity {
         this.registerHandler();
     }
 
+    public void updateValuesClient(Values values){
+        this.values.updateValues(values);
+    }
+
     private void registerHandler() {
         if (currHandler != null) {
             currHandler.removeBlockFromHandler(this);

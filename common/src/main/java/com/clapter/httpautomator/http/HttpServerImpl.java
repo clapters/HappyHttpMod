@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
+import java.nio.channels.SocketChannel;
 import java.util.*;
 
 public class HttpServerImpl implements IHttpServer {
@@ -46,21 +47,23 @@ public class HttpServerImpl implements IHttpServer {
     }
 
     private static String getInternalIPv4Address() throws Exception {
-        Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
-        while (networkInterfaces.hasMoreElements()) {
-            NetworkInterface networkInterface = networkInterfaces.nextElement();
-            if (networkInterface.isUp() && !networkInterface.isLoopback()) {
-                Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
-                while (inetAddresses.hasMoreElements()) {
-                    InetAddress inetAddress = inetAddresses.nextElement();
-                    if (inetAddress instanceof java.net.Inet4Address) {
+        if(Services.HTTP_CONFIG.getLocalAdress().isEmpty()) {
+            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+            while (networkInterfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = networkInterfaces.nextElement();
+                if (networkInterface.isUp() && !networkInterface.isLoopback()) {
+                    Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
+                    while (inetAddresses.hasMoreElements()) {
+                        InetAddress inetAddress = inetAddresses.nextElement();
+                        if (inetAddress instanceof java.net.Inet4Address) {
 
-                        return inetAddress.getHostAddress();
+                            return inetAddress.getHostAddress();
+                        }
                     }
                 }
             }
         }
-        return "";
+        return Services.HTTP_CONFIG.getLocalAdress();
     }
 
     private static String getExternalIPAddress() {
@@ -84,6 +87,7 @@ public class HttpServerImpl implements IHttpServer {
 
     private void handleHandlersInQueue() {
         handlerToRegisterQueue.values().forEach(this::registerHandler);
+        handlerToRegisterQueue.clear();
     }
 
     @Override
@@ -111,9 +115,12 @@ public class HttpServerImpl implements IHttpServer {
     @Override
     public void removeHandler(IHttpHandler handler) {
         try {
-            server.removeContext(handler.getUrl());
-        }catch (Exception ignored) {
 
+            handlerMap.remove(handler.getUrl());
+            server.removeContext(handler.getUrl());
+
+        }catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -151,7 +158,7 @@ public class HttpServerImpl implements IHttpServer {
     @Override
     public void stopServer() {
         if(server != null){
-            server.stop(1);
+            server.stop(0);
             server = null;
         }
     }

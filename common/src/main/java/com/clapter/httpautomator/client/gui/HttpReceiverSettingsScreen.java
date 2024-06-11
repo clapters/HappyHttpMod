@@ -81,10 +81,10 @@ public class HttpReceiverSettingsScreen extends BaseBlockScreen {
                 .bounds(leftPos+27, topPos+200, 50, 20)
                 .build()
         );
-        if(this.forceMapInit) {
-            this.readParameterMap(this.blockEntity.getValues().parameterMap);
-            this.forceMapInit = false;
-        }
+        //if(this.forceMapInit) {
+            //this.readParameterMap(this.blockEntity.getValues().parameterMap);
+        //    this.forceMapInit = false;
+        //}
         this.endpoint = new EditBox(font, leftPos, topPos + 6, 198, 20, Component.empty());
         this.endpoint.setMaxLength(1028);
         this.endpoint.setResponder(text -> {
