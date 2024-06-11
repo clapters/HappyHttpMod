@@ -37,9 +37,9 @@ This Minecraft mod introduces two custom blocks that interact with webhooks and 
 
 #### Client
 
-- Minecraft version 1.20.2 (roadmap: 1.19.4, 1.19.2, 1.18.2)
-- Forge for Minecraft 1.20.2
+- Minecraft with Forge for Minecraft version 1.20.2 (roadmap: 1.19.4, 1.19.2, 1.18.2)
 - (roadmap: Fabric version X.X.X)
+- (roadmap: NeoForge version X.X.X)
 
 #### Server
 
