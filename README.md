@@ -1,4 +1,4 @@
-# Happy HTTP Mod
+# Happy HTTP Minecraft Mod
 
 This Minecraft mod introduces two custom blocks that interact with webhooks and HTTP requests, enabling powerful integrations and automations both within and outside the Minecraft world.
 
