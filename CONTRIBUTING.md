@@ -52,7 +52,7 @@ We welcome suggestions for new features! To suggest a feature, please open an is
    git clone [https://github.com/clapters/HappyHttpMod].git
    cd your-repo
    git checkout -b feature/your-feature-name
-```
+   ```
 
 3. **Create a New Branch**: Create a branch for your work.
    ```sh
