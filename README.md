@@ -43,7 +43,6 @@ This Minecraft mod introduces two custom blocks that interact with webhooks and 
 
 #### Server
 
-- Minecraft Server version 1.20.2 (roadmap: 1.19.4, 1.19.2, 1.18.2)
 - Minecraft Forge Server for Minecraft version 1.20.2 (roadmap: 1.19.4, 1.19.2, 1.18.2)
 - (roadmap: Minecraft Spigot Server version 1.20.2, 1.19.4, 1.19.2, 1.18.2)
 
