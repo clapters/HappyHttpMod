@@ -70,25 +70,32 @@ This Minecraft mod introduces two custom blocks that interact with webhooks and 
 1. **Configure the Webhook Server**:
    - After the first run, a configuration file named `happyhttpmod-config.json` will be generated in the Minecraft configuration directory (usually `.minecraft/config/`).
    - Edit the `happyhttpmod-config.json` file to set up the webhook server's IP address and port:
-     ```json
-     {
-       "webhookServerIP": "",
-       "webhookServerPort": 4567
-     }
+       ``` 
+      ["Http Server Settings"]
+    	#Http Server Port
+    	#Range: 0 ~ 999999
+	    port = 8080
+	    #Local adress of the machine. Leave empty to determine automatically (May be wrong if more than one Network Interface)
+	    local_adress = "192.168.0.1"
      ```
-   - If `webhookServerIP` is left blank or missing, the server will use the IP of the local machine. If your machine has multiple IP addresses, specify the desired IP address to bind the server to that specific IP.
+   - To use the webhook, configure your local IP address in the settings. If your machine has multiple IP addresses, specify the desired IP address to bind the server to that specific IP.
 
 2. **Place and Configure Blocks**:
    - **HTTP Receiver Block**: 
      - Place the HTTP Receiver Block in your Minecraft world.
      - Right-click the block to open its configuration interface.
-     - Set up the parameters that the block should listen for when a webhook request is received, such as expected parameter keys and values.
+     - Set up the endpoint. Local IP is for use on local network only. External IP is for outside the local network.
+     - Power type: Select if the block should just switch between on/off, or if it should send a redstone signal for a defined number of seconds.
+     - Optional: Set up the parameters that the block should listen for when a webhook request is received, such as expected parameter keys and values. To use parameters, use this format: URL/endpoint?parameter1=value1&parameter2=value2&parameter3=value3
+     - Optional: Configure a redirect URL. For redirection to a different site, use full protocol (http:// or https://) and then the URL. 
 
    - **HTTP Sender Block**:
      - Place the HTTP Sender Block in your Minecraft world.
      - Right-click the block to open its configuration interface.
-     - Set the target URL and parameters that the block should send when it receives a redstone signal.
-
+     - Set the target URL (endpoint)
+     - Select if the request should be GET or POST
+     - Optional: Set up the parameters that the block should submit, such as expected parameter keys and values. To use parameters, use this format: URL/endpoint?parameter1=value1&parameter2=value2&parameter3=value3
+     
 3. **Set Up Redstone Circuits**:
    - Connect the HTTP Receiver Block to redstone dust and a redstone lamp or any other redstone mechanism.
    - Ensure the HTTP Sender Block is connected to a redstone input source (like a button or lever).
@@ -97,14 +104,19 @@ This Minecraft mod introduces two custom blocks that interact with webhooks and 
 **Configure the Webhook Server**:
    - After the first run, a configuration file named `happyhttpmod-config.json` will be generated in the Minecraft configuration directory (usually `.minecraft/config/`).
    - Edit the `happyhttpmod-config.json` file to set up the webhook server's IP address and port:
-     ```json
-     {
-       "webhookServerIP": "",
-       "webhookServerPort": 4567
-     }
+     ```      
+      ["Http Server Settings"]
+    	#Http Server Port
+    	#Range: 0 ~ 999999
+	    port = 8080
+	    #Local adress of the machine. Leave empty to determine automatically (May be wrong if more than one Network Interface)
+	    local_adress = "192.168.0.1"
      ```
-   - If `webhookServerIP` is left blank or missing, the server will use the IP of the local machine. If your machine has multiple IP addresses, specify the desired IP address to bind the server to that specific IP.
+   - To use the webhook, configure your local IP address in the settings. If your machine has multiple IP addresses, specify the desired IP address to bind the server to that specific IP.
 
+**Configure your router**:
+
+- To allow webhooks on your server to be allowed to pass through your router, you often need to set up port forwarding on your router. Configure that the webhook port you have defined in the config is forwarded to the Minecraft server IP. 
 
 ## Contributing
 Guidelines for contributing to the project.
