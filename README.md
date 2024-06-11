@@ -38,13 +38,14 @@ This Minecraft mod introduces two custom blocks that interact with webhooks and 
 #### Client
 
 - Minecraft version 1.20.2 (roadmap: 1.19.4, 1.19.2, 1.18.2)
-- Forge version X.X.X
-- Fabric version X.X.X
+- Forge for Minecraft 1.20.2
+- (roadmap: Fabric version X.X.X)
 
 #### Server
 
 - Minecraft Server version 1.20.2 (roadmap: 1.19.4, 1.19.2, 1.18.2)
-- Minecraft Spigot Server version 1.20.2 (roadmap: 1.19.4, 1.19.2, 1.18.2)
+- Minecraft Forge Server for Minecraft version 1.20.2 (roadmap: 1.19.4, 1.19.2, 1.18.2)
+- (roadmap: Minecraft Spigot Server version 1.20.2, 1.19.4, 1.19.2, 1.18.2)
 
 
 ### Steps
