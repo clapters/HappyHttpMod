@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "httpautomator:block/sender_lit"
+    "all": "happyhttp:block/receiver"
   }
 }
