@@ -1,7 +1,7 @@
 ---
 name: Compatibility Issue
 about: Report compatibility issues with different Minecraft versions and platforms
-title: "[Compatibility] "
+title: "[Compatibility] with [Minecraft version] on [Mod loader]"
 labels: ['compatibility', 'needs-triage']
 assignees: ''
 
