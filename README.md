@@ -135,6 +135,8 @@ Guidelines for contributing to the project.
 - Push to the branch (git push origin feature/AmazingFeature).
 - Open a pull request.
 
+[Join our Discord server](https://discord.gg/G74dTm9D8m)
+
 ## Support
 
 If you encounter any issues or have questions, please open an issue on the [GitHub Issues](https://github.com/clapters/happyhttpmod/issues) page.
