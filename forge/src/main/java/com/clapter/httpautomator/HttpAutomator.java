@@ -13,6 +13,7 @@ import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -25,8 +26,10 @@ public class HttpAutomator {
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarting);
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
         MinecraftForge.EVENT_BUS.addListener(this::onServerStopping);
+
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCreativeTabsBuildContent);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onFMLCommonSetup);
+        HttpServerConfig.loadConfig();
     }
 
     private void onServerStarting(ServerStartingEvent e){
@@ -52,5 +55,6 @@ public class HttpAutomator {
             e.accept(ModBlocks.httpSenderBlock);
         }
     }
+
 
 }
