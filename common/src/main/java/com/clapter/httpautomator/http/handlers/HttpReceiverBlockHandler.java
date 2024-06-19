@@ -3,6 +3,8 @@ package com.clapter.httpautomator.http.handlers;
 import com.clapter.httpautomator.CommonClass;
 import com.clapter.httpautomator.blockentity.HttpReceiverBlockEntity;
 import com.clapter.httpautomator.http.api.IHttpHandler;
+import com.clapter.httpautomator.platform.Services;
+import com.clapter.httpautomator.platform.config.GlobalParam;
 import com.clapter.httpautomator.utils.JsonUtils;
 import com.clapter.httpautomator.utils.ParameterReader;
 import com.sun.net.httpserver.Headers;
@@ -78,12 +80,55 @@ public class HttpReceiverBlockHandler implements IHttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        List<GlobalParam> globalParams = Services.HTTP_CONFIG.getGlobalParams();
+        if(!globalParams.isEmpty()){
+            if(!this.checkGlobalParams(exchange, globalParams)){
+                this.writeResponse(exchange);
+                return;
+            }
+        }
         entityList.forEach((blockEntity) -> {
             if(this.shouldEntityBePowered(exchange, blockEntity)){
                 blockEntity.onSignal();
             }
         });
         this.writeResponse(exchange);
+    }
+
+    private boolean checkGlobalParams(HttpExchange exchange, List<GlobalParam> globalParams) throws IOException {
+        //CHECK REQUEST PARAMS WITH EVERY GLOBAL PARAM
+        Map<String, String> params = ParameterReader.getAllParameters(exchange);
+        String redirect = Services.HTTP_CONFIG.getGlobalRedirect();
+        System.out.println("HERE "+redirect);
+        if(params.isEmpty()){
+            //GLOBAL REDIRECT
+            //String redirect = Services.HTTP_CONFIG.getGlobalRedirect();
+            //System.out.println(redirect);
+            if(redirect != null && !redirect.isEmpty()) {
+                exchange.getResponseHeaders().add("Location", redirect);
+                exchange.sendResponseHeaders(308, 0);
+            }
+            return false;
+        }
+        for(GlobalParam param : globalParams){
+            String requestParam = params.get(param.name);
+            if(requestParam == null){
+                //PARAM NOT IN THE REQUEST
+                if(param.redirectWrong != null && !param.redirectWrong.isEmpty()) {
+                    exchange.getResponseHeaders().add("Location", param.redirectWrong);
+                    exchange.sendResponseHeaders(308, 0);
+                }
+                return false;
+            }
+            if(!param.value.equals(requestParam)){
+                if(param.redirectWrong != null && !param.redirectWrong.isEmpty()) {
+                    exchange.getResponseHeaders().add("Location", param.redirectWrong);
+                    exchange.sendResponseHeaders(308, 0);
+                }
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean shouldEntityBePowered(HttpExchange exchange, HttpReceiverBlockEntity entity){

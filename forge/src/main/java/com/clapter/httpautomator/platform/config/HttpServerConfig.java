@@ -12,7 +12,7 @@ import java.util.*;
 public class HttpServerConfig implements IHttpServerConfig {
 
     public static List<GlobalParam> globalParams = new ArrayList<>();
-
+    public static String globalRedirect;
     private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
     public static ForgeConfigSpec COMMON_CONFIG;
     private static final Path CONFIG_PATH = FMLPaths.CONFIGDIR.get().resolve("happyhttp-global-vars.toml");
@@ -123,6 +123,9 @@ public class HttpServerConfig implements IHttpServerConfig {
                             break;
                     }
                 }
+                if(key.startsWith("global_param_redirect")) {
+                    globalRedirect = properties.getProperty(key);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -146,6 +149,11 @@ public class HttpServerConfig implements IHttpServerConfig {
     @Override
     public List<GlobalParam> getGlobalParams() {
         return globalParams;
+    }
+
+    @Override
+    public String getGlobalRedirect() {
+        return globalRedirect;
     }
 
 }

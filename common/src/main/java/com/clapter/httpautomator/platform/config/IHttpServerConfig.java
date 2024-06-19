@@ -7,5 +7,6 @@ public interface IHttpServerConfig {
     int getPort();
     String getLocalAdress();
     List<GlobalParam> getGlobalParams();
+    String getGlobalRedirect();
 
 }

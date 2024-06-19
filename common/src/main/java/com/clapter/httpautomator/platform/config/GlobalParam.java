@@ -1,7 +1,5 @@
 package com.clapter.httpautomator.platform.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-
 public class GlobalParam {
 
     public final String index;
