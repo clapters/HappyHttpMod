@@ -86,7 +86,7 @@ public class HttpReceiverSettingsScreen extends BaseBlockScreen {
         //    this.forceMapInit = false;
         //}
         this.endpoint = new EditBox(font, leftPos, topPos + 6, 198, 20, Component.empty());
-        this.endpoint.setMaxLength(1028);
+        this.endpoint.setMaxLength(2056);
         this.endpoint.setResponder(text -> {
             endpointText = text;
         });

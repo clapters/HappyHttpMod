@@ -74,6 +74,7 @@ public class HttpSenderSettingsScreen extends BaseBlockScreen {
         endpoint.setResponder(text -> {
             endpointText = text;
         });
+        endpoint.setMaxLength(2056);
         endpoint.insertText(blockEntity.getValues().url);
 
 
