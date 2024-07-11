@@ -158,6 +158,7 @@ public class HttpReceiverBlockHandler implements IHttpHandler {
         String redirect = this.getRedirect(exchange);
         if(redirect != null){
             exchange.getResponseHeaders().add("Location", redirect);
+            exchange.getResponseHeaders().add("cache-control", "no-store, max-age=0");
             exchange.sendResponseHeaders(308, 0);
         }else{
             String response = "OK";
